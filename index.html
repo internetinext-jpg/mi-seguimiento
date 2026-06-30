@@ -27,6 +27,7 @@
     --miss-ring:#dfe4ea;
     --today:#7a93b8;
     --warn:#d8a657;
+    --warn-soft:#f7eedc;
     --radius:16px;
     --shadow:0 1px 2px rgba(43,52,64,.04), 0 6px 20px rgba(43,52,64,.06);
   }
@@ -35,6 +36,7 @@
       --bg:#11161c; --card:#1a212a; --ink:#e7ecf1; --ink-soft:#93a0ad;
       --line:#283340; --accent:#7fb89a; --accent-soft:#22302a; --accent-2:#8fa9d0;
       --done:#3d6b53; --done-strong:#7fb89a; --miss:#222b35; --miss-ring:#2c3744;
+      --warn:#d8a657; --warn-soft:#312a1c;
       --shadow:0 1px 2px rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.28);
     }
   }
@@ -50,20 +52,19 @@
   header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
   h1{font-size:20px;margin:0;font-weight:650;letter-spacing:-.01em}
   .sub{color:var(--ink-soft);font-size:13px;margin-top:2px}
-  .day-badge{
-    text-align:right;flex-shrink:0;
-  }
+  .day-badge{text-align:right;flex-shrink:0}
   .day-num{font-size:30px;font-weight:700;line-height:1;color:var(--accent)}
   .day-lbl{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
-  .phase-pill{
-    display:inline-block;margin-top:8px;font-size:11px;font-weight:600;
-    background:var(--accent-soft);color:var(--accent);padding:3px 9px;border-radius:999px;
-  }
-  .card{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    box-shadow:var(--shadow);padding:18px;margin-bottom:16px;
-  }
+  .phase-pill{display:inline-block;margin-top:8px;font-size:11px;font-weight:600;background:var(--accent-soft);color:var(--accent);padding:3px 9px;border-radius:999px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
   .card h2{font-size:14px;margin:0 0 14px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+
+  /* aviso respaldo */
+  #backup.card{border-left:3px solid var(--warn);background:linear-gradient(180deg,var(--warn-soft),var(--card) 92%);display:flex;align-items:center;gap:12px;justify-content:space-between}
+  #backup .bk-txt{font-size:14px}
+  #backup .bk-txt b{display:block;font-size:13px;color:var(--warn)}
+  #backup button{border:none;background:var(--warn);color:#fff;font-weight:600;font-size:13px;padding:9px 14px;border-radius:9px;cursor:pointer;flex-shrink:0}
+  #backup.hidden{display:none}
 
   /* mensaje aliento */
   #message.card{border-left:3px solid var(--accent);background:linear-gradient(180deg,var(--accent-soft),var(--card) 90%)}
@@ -74,10 +75,7 @@
   /* check-in */
   .check{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer;user-select:none}
   .check:last-of-type{border-bottom:none}
-  .box{
-    width:24px;height:24px;border-radius:7px;border:2px solid var(--miss-ring);flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;transition:all .15s ease;background:transparent;
-  }
+  .box{width:24px;height:24px;border-radius:7px;border:2px solid var(--miss-ring);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s ease;background:transparent}
   .check.on .box{background:var(--accent);border-color:var(--accent)}
   .box svg{width:14px;height:14px;opacity:0;transition:opacity .15s}
   .check.on .box svg{opacity:1}
@@ -88,20 +86,13 @@
   .stress .label{font-size:15px;margin-bottom:10px}
   .stress .label small{display:block;color:var(--ink-soft);font-size:12px}
   .scale{display:flex;gap:8px}
-  .scale button{
-    flex:1;padding:10px 0;border-radius:10px;border:1px solid var(--line);background:var(--card);
-    color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;transition:all .12s;
-  }
+  .scale button{flex:1;padding:10px 0;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;transition:all .12s}
   .scale button:hover{border-color:var(--accent-2)}
   .scale button.sel{background:var(--accent-2);color:#fff;border-color:var(--accent-2)}
   .scale .ends{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-top:6px}
 
-  textarea{
-    width:100%;margin-top:14px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;
-    font-family:inherit;font-size:14px;resize:vertical;min-height:46px;background:var(--card);color:var(--ink);
-  }
+  textarea{width:100%;margin-top:14px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:14px;resize:vertical;min-height:46px;background:var(--card);color:var(--ink)}
   textarea:focus{outline:none;border-color:var(--accent-2)}
-
   .saved{font-size:12px;color:var(--accent);height:16px;margin-top:8px;opacity:0;transition:opacity .3s}
   .saved.show{opacity:1}
 
@@ -119,24 +110,38 @@
   .dot.d-part{background:var(--done)}
   .dot.d-miss{background:var(--miss);border:1px solid var(--miss-ring)}
   .dot.d-future{background:transparent;border:1px dashed var(--miss-ring)}
+  .cal-hint{font-size:12px;color:var(--ink-soft);margin-bottom:12px}
   .cal{display:grid;grid-template-columns:repeat(10,1fr);gap:7px}
-  .cell{
-    aspect-ratio:1;border-radius:7px;background:var(--miss);border:1px solid var(--miss-ring);
-    display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft);
-    cursor:default;transition:transform .1s;position:relative;
-  }
-  .cell.future{background:transparent;border-style:dashed;color:var(--miss-ring)}
+  .cell{aspect-ratio:1;border-radius:7px;background:var(--miss);border:1px solid var(--miss-ring);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft);cursor:pointer;transition:transform .1s;position:relative}
+  .cell.future{background:transparent;border-style:dashed;color:var(--miss-ring);cursor:default}
+  .cell.before{opacity:.4;cursor:default}
   .cell.part{background:var(--done);border-color:var(--done);color:#fff}
   .cell.done{background:var(--done-strong);border-color:var(--done-strong);color:#fff}
   .cell.today{outline:2px solid var(--today);outline-offset:1px}
   .cell.phase-edge{box-shadow:inset 3px 0 0 var(--accent-2)}
-  .cell:hover{transform:scale(1.12);z-index:2}
-  .cell .tip{
-    position:absolute;bottom:130%;left:50%;transform:translateX(-50%);
-    background:var(--ink);color:var(--bg);font-size:11px;padding:5px 8px;border-radius:6px;
-    white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:5;
-  }
-  .cell:hover .tip{opacity:1}
+  .cell:not(.future):not(.before):hover{transform:scale(1.12);z-index:2}
+  .cell .marks{position:absolute;bottom:2px;display:flex;gap:2px}
+  .cell .marks i{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.85)}
+  .cell.miss .marks i{background:var(--ink-soft)}
+
+  /* historial / analisis */
+  .mini-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:6px}
+  .mini{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px}
+  .mini .mv{font-size:20px;font-weight:700;color:var(--accent);line-height:1}
+  .mini .mk{font-size:12px;color:var(--ink-soft)}
+  .mini .mk small{display:block;font-size:11px}
+
+  .chart-wrap{margin-top:6px}
+  .chart-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .chart-head .avg{font-size:12px;color:var(--ink-soft)}
+  .chart{width:100%;height:96px;display:block}
+  .chart-x{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-soft);margin-top:4px}
+  .empty{font-size:13px;color:var(--ink-soft);padding:8px 0}
+
+  .notes-list{display:flex;flex-direction:column;gap:10px;max-height:280px;overflow:auto}
+  .note-item{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .note-item .nd{font-size:11px;color:var(--ink-soft);margin-bottom:3px;text-transform:uppercase;letter-spacing:.03em}
+  .note-item .nt{font-size:14px;white-space:pre-wrap;word-break:break-word}
 
   /* fases resumen */
   .phases{display:flex;flex-direction:column;gap:8px}
@@ -147,19 +152,34 @@
   .prow.cur{color:var(--accent);font-weight:600}
   .prow .pd{color:var(--ink-soft);font-size:11px;flex-shrink:0;width:62px;text-align:right}
 
-  /* footer / settings */
+  /* ajustes */
   .tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-  .tools button{
-    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:13px;
-    padding:8px 12px;border-radius:9px;cursor:pointer;transition:all .12s;
-  }
+  .tools button{border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:13px;padding:8px 12px;border-radius:9px;cursor:pointer;transition:all .12s}
   .tools button:hover{border-color:var(--accent-2);color:var(--ink)}
+  .storage-note{font-size:12px;color:var(--ink-soft);margin-top:14px;display:flex;align-items:center;gap:7px}
+  .storage-note .badge{width:8px;height:8px;border-radius:50%;background:var(--miss-ring);flex-shrink:0}
+  .storage-note.ok .badge{background:var(--accent)}
   .foot{text-align:center;color:var(--ink-soft);font-size:11px;margin-top:24px;line-height:1.6}
   .switch{display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer;user-select:none}
   .toggle{width:42px;height:24px;border-radius:999px;background:var(--miss-ring);position:relative;transition:background .15s;flex-shrink:0}
   .toggle i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
   .switch.on .toggle{background:var(--accent)}
   .switch.on .toggle i{transform:translateX(18px)}
+
+  /* modal detalle de dia */
+  .overlay{position:fixed;inset:0;background:rgba(20,26,33,.55);backdrop-filter:blur(2px);display:flex;align-items:flex-end;justify-content:center;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s}
+  .overlay.show{opacity:1;pointer-events:auto}
+  @media(min-width:560px){.overlay{align-items:center}}
+  .modal{background:var(--card);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -8px 40px rgba(0,0,0,.25);transform:translateY(20px);transition:transform .18s;max-height:88vh;overflow:auto}
+  @media(min-width:560px){.modal{border-radius:18px}}
+  .overlay.show .modal{transform:translateY(0)}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .modal-head .mtitle{font-size:17px;font-weight:650}
+  .modal-head .msubt{font-size:12px;color:var(--ink-soft)}
+  .mclose{border:none;background:var(--miss);color:var(--ink);width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0}
+  .modal-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px}
+  .modal-foot .mclear{border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:13px;padding:8px 12px;border-radius:9px;cursor:pointer}
+  .modal-foot .mdone{border:none;background:var(--accent);color:#fff;font-weight:600;font-size:14px;padding:10px 20px;border-radius:10px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -176,6 +196,11 @@
       <div class="phase-pill" id="phasePill">Fase 1</div>
     </div>
   </header>
+
+  <div class="card hidden" id="backup">
+    <div class="bk-txt"><b>Respalda tu progreso</b><span id="bkMsg"></span></div>
+    <button id="bkBtn">Respaldar ahora</button>
+  </div>
 
   <div class="card hidden" id="message">
     <div class="msg-head"><span id="msgIcon">●</span><span id="msgTitle"></span></div>
@@ -223,7 +248,29 @@
       <span><i class="dot d-miss"></i> Sin marcar</span>
       <span><i class="dot d-future"></i> Por venir</span>
     </div>
+    <div class="cal-hint">Toca cualquier día para ver o editar lo que registraste.</div>
     <div class="cal" id="cal"></div>
+  </div>
+
+  <div class="card">
+    <h2>Tus hábitos</h2>
+    <div class="mini-stats" id="miniStats"></div>
+  </div>
+
+  <div class="card">
+    <h2>Estrés en el tiempo</h2>
+    <div class="chart-wrap">
+      <div class="chart-head"><span style="font-size:12px;color:var(--ink-soft)">1 = tranquilo · 5 = muy tenso</span><span class="avg" id="stressAvg"></span></div>
+      <svg class="chart" id="stressChart" preserveAspectRatio="none"></svg>
+      <div class="chart-x"><span id="chartStart"></span><span id="chartEnd">hoy</span></div>
+      <div class="empty hidden" id="chartEmpty">Aún no hay registros de estrés. Aparecerán aquí cuando marques el nivel de tu día.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Diario de notas</h2>
+    <div class="notes-list" id="notesList"></div>
+    <div class="empty hidden" id="notesEmpty">Las notas que escribas en tus check-ins aparecerán aquí, de la más reciente a la más antigua.</div>
   </div>
 
   <div class="card">
@@ -243,14 +290,57 @@
       <button id="startBtn">Cambiar fecha de inicio</button>
       <button id="resetBtn">Borrar todo</button>
     </div>
+    <div class="storage-note" id="storageNote"><span class="badge"></span><span id="storageTxt">Comprobando almacenamiento…</span></div>
     <input type="file" id="fileInput" accept="application/json" style="display:none">
   </div>
 
   <div class="foot">
     Todo se guarda solo en este dispositivo. Nada se envía a internet.<br>
+    Respalda con "Exportar copia" de vez en cuando: si reinstalas o cambias de teléfono, esa copia es la única forma de recuperar tu historial.<br>
     Guía de autoayuda, no diagnóstico médico. Si aparece dolor pélvico, sangre u otros síntomas físicos, consulta a un médico sin esperar.
   </div>
 
+</div>
+
+<!-- modal de detalle / edición de un día -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <div>
+        <div class="mtitle" id="mTitle">Día</div>
+        <div class="msubt" id="mSubt"></div>
+      </div>
+      <button class="mclose" id="mClose" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="check" data-mkey="main">
+      <div class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="label" id="mMainLabel"></div>
+    </div>
+    <div class="check" data-mkey="kegels">
+      <div class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="label">Kegels<small>3 series del día</small></div>
+    </div>
+    <div class="check" data-mkey="exercise">
+      <div class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="label">Ejercicio del día</div>
+    </div>
+
+    <div class="stress">
+      <div class="label">Nivel de estrés / ansiedad</div>
+      <div class="scale" id="mStressScale">
+        <button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button>
+      </div>
+      <div class="ends"><span>tranquilo</span><span>muy tenso</span></div>
+    </div>
+
+    <textarea id="mNote" placeholder="Nota del día (opcional)…"></textarea>
+
+    <div class="modal-foot">
+      <button class="mclear" id="mClear">Limpiar día</button>
+      <button class="mdone" id="mDone">Listo</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -264,9 +354,11 @@
     start: "2026-06-29",     // fecha de inicio (día 1)
     discreet: true,
     days: {},                // { "YYYY-MM-DD": {main,kegels,exercise,stress,note} }
-    seenMsgs: {}             // mensajes ya mostrados (para no repetir hitos)
+    seenMsgs: {},            // mensajes ya mostrados (para no repetir hitos)
+    lastBackup: 0            // epoch ms del último respaldo (0 = nunca)
   };
   let state = load();
+  let selectedISO = null;    // día abierto en el modal
 
   function load(){
     try{
@@ -279,26 +371,13 @@
   function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 
   // ---------- fechas ----------
-  function todayISO(){
-    const d = new Date();
-    return iso(d);
-  }
-  function iso(d){
-    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-  }
+  function todayISO(){ return iso(new Date()); }
+  function iso(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
   function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
-  function dayNumberOf(isoStr){
-    const diff = Math.round((parseISO(isoStr) - parseISO(state.start))/DAY);
-    return diff + 1; // día 1 = inicio
-  }
-  function isoForDayNumber(n){
-    const d = parseISO(state.start);
-    d.setDate(d.getDate() + (n-1));
-    return iso(d);
-  }
+  function dayNumberOf(isoStr){ return Math.round((parseISO(isoStr) - parseISO(state.start))/DAY) + 1; }
+  function isoForDayNumber(n){ const d=parseISO(state.start); d.setDate(d.getDate()+(n-1)); return iso(d); }
 
   // ---------- fases ----------
-  // [nombre, díaInicio, díaFin]
   const PHASES = [
     {n:1, label:"Fase 1", from:1,  to:14, name:"Reducción progresiva"},
     {n:2, label:"Fase 2", from:15, to:28, name:"Espaciar más"},
@@ -311,13 +390,9 @@
     for(const p of PHASES){ if(n >= p.from && n <= p.to) return p; }
     return PHASES[PHASES.length-1];
   }
-
-  // etiqueta del objetivo principal según fase (modo discreto vs normal)
   function mainLabelFor(n){
     const p = phaseForDay(n).n;
-    if(state.discreet){
-      return {t:"Día cumplido", s:"según el objetivo de hoy"};
-    }
+    if(state.discreet) return {t:"Día cumplido", s:"según el objetivo de hoy"};
     if(p===1) return {t:"Sesión controlada o sin consumo", s:"máx. 1 vez al día, sin scroll ni buscar nuevo"};
     if(p===2) return {t:"Día dentro del objetivo", s:"espaciar a cada 2-3 días"};
     if(p===3) return {t:"Día sin pornografía", s:"consumo cero o muy ocasional"};
@@ -329,50 +404,49 @@
   function isComplete(d){ return d && d.main && d.kegels && d.exercise; }
   function isPartial(d){ return d && (d.main || d.kegels || d.exercise) && !isComplete(d); }
   function isMainDone(d){ return !!(d && d.main); }
+  function hasAny(d){ return d && (d.main||d.kegels||d.exercise||d.stress||(d.note&&d.note.trim())); }
 
-  // racha actual: días consecutivos con "main" cumplido, terminando en hoy (o ayer si hoy aún sin marcar)
-  function currentStreak(){
+  // racha genérica según un predicado, terminando hoy (o ayer si hoy aún sin marcar)
+  function streakFor(pred){
     const t = dayNumberOf(todayISO());
     let n = t;
-    // si hoy aún no marcado main, empezamos a contar desde ayer
-    if(!isMainDone(getDay(isoForDayNumber(t)))) n = t-1;
+    if(!pred(getDay(isoForDayNumber(t)))) n = t-1;
     let c = 0;
-    while(n >= 1){
-      if(isMainDone(getDay(isoForDayNumber(n)))){ c++; n--; }
-      else break;
-    }
+    while(n >= 1){ if(pred(getDay(isoForDayNumber(n)))){ c++; n--; } else break; }
     return c;
   }
+  const predMain     = d => !!(d && d.main);
+  const predExercise = d => !!(d && d.exercise);
+  const predKegels   = d => !!(d && d.kegels);
+
+  function currentStreak(){ return streakFor(predMain); }
   function bestStreak(){
-    const t = dayNumberOf(todayISO());
+    const t = Math.max(dayNumberOf(todayISO()),1);
     let best=0, run=0;
-    for(let n=1;n<=Math.max(t,1);n++){
-      if(isMainDone(getDay(isoForDayNumber(n)))){ run++; best=Math.max(best,run); }
-      else run=0;
-    }
+    for(let n=1;n<=t;n++){ if(predMain(getDay(isoForDayNumber(n)))){ run++; best=Math.max(best,run); } else run=0; }
     return best;
+  }
+  function countFor(pred){
+    const t = Math.min(dayNumberOf(todayISO()),90);
+    let c=0; for(let n=1;n<=t;n++){ if(pred(getDay(isoForDayNumber(n)))) c++; } return c;
   }
   function compliancePct(){
     const t = Math.min(dayNumberOf(todayISO()), 90);
     if(t < 1) return 0;
-    let done=0;
-    for(let n=1;n<=t;n++){ if(isMainDone(getDay(isoForDayNumber(n)))) done++; }
+    let done=0; for(let n=1;n<=t;n++){ if(predMain(getDay(isoForDayNumber(n)))) done++; }
     return Math.round(done/t*100);
   }
 
   // ---------- mensajes de aliento ----------
-  // Devuelve {id,title,body,icon} más relevante para mostrar hoy, o null.
   function pickMessage(){
     const t = dayNumberOf(todayISO());
     if(t < 1) return null;
     const streak = currentStreak();
     const today = getDay(todayISO());
     const yest = getDay(isoForDayNumber(t-1));
-
     const H = state.discreet ? "hábito" : "proceso";
     const candidates = [];
 
-    // 1) checkpoint de fase
     if(CHECKPOINTS.includes(t) && isMainDone(today)){
       const cp = {
         14:{title:"Checkpoint · Día 14", body:"Cerraste las primeras dos semanas. No se trata de que haya sido perfecto, sino de que arrancaste y sostuviste. Revisa: ¿lograste bajar la frecuencia? Si sí, ahora toca estirar el intervalo. Si no, ajusta los bloqueos y sigue — no es fracaso."},
@@ -383,7 +457,6 @@
       candidates.push({id:"cp"+t, icon:"◆", ...cp, sticky:true});
     }
 
-    // 2) hitos de racha
     const milestones = {3:"3 días",7:"7 días",14:"14 días",21:"21 días",30:"30 días",60:"60 días",90:"90 días"};
     if(milestones[streak]){
       let body;
@@ -397,96 +470,75 @@
       candidates.push({id:"ms"+streak, icon:"▲", title:`Racha de ${milestones[streak]}`, body});
     }
 
-    // 3) retomar tras un desliz (ayer falló main, hoy se cumplió)
     if(yest && !isMainDone(yest) && isMainDone(today) && t>1){
-      candidates.push({
-        id:"recover"+todayISO(), icon:"↻",
-        title:"Lo retomaste",
-        body:"Ayer no salió y hoy volviste. Eso es exactamente lo que importa: lo que sostiene el avance no es la perfección, es retomar rápido. Un día suelto no borra el promedio."
-      });
+      candidates.push({id:"recover"+todayISO(), icon:"↻", title:"Lo retomaste", body:"Ayer no salió y hoy volviste. Eso es exactamente lo que importa: lo que sostiene el avance no es la perfección, es retomar rápido. Un día suelto no borra el promedio."});
     }
-
-    // 4) primer día completo
     if(t===1 && isMainDone(today)){
       candidates.push({id:"start", icon:"○", title:"Día 1 hecho", body:"Empezaste. El primer check es el más importante porque convierte la intención en algo real. Nos vemos mañana."});
     }
 
-    // elegir: prioridad checkpoint > racha > retomar > inicio. Evitar repetir hitos ya vistos (excepto checkpoints/retomar que dependen del día)
     candidates.sort((a,b)=>{
       const order = {cp:0, ms:1, recover:2, start:3};
       const ka = a.id.replace(/[0-9-].*$/,""), kb = b.id.replace(/[0-9-].*$/,"");
       return (order[ka]??9)-(order[kb]??9);
     });
-    for(const c of candidates){
-      if(state.seenMsgs[c.id] && !c.sticky) continue;
-      return c;
-    }
-    // si todos vistos, mostrar el de mayor prioridad igual cuando es checkpoint/sticky
+    for(const c of candidates){ if(state.seenMsgs[c.id] && !c.sticky) continue; return c; }
     return candidates.find(c=>c.sticky) || null;
   }
 
   // ---------- render ----------
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
-
-  function fmtDate(isoStr){
-    const months=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
-    const d=parseISO(isoStr);
-    const wd=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"][d.getDay()];
-    return `${wd}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-  }
+  const MONTHS=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  const WD=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  function fmtDate(isoStr){ const d=parseISO(isoStr); return `${WD[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; }
+  function fmtShort(isoStr){ const d=parseISO(isoStr); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; }
 
   function render(){
     const tISO = todayISO();
     const t = dayNumberOf(tISO);
     const ph = phaseForDay(t);
 
-    // header
     $("#appTitle").textContent = state.discreet ? "Mi seguimiento" : "Seguimiento de progreso";
     $("#dateSub").textContent = fmtDate(tISO);
     $("#dayNum").textContent = (t>=1 && t<=90) ? t : (t<1 ? "—" : "✓");
     $("#phasePill").textContent = state.discreet ? ("Etapa "+ph.n) : (ph.label+" · "+ph.name);
-    $("#checkinTitle").textContent = "Check-in de hoy";
 
-    // label principal segun fase
     const ml = mainLabelFor(t);
     $("#mainLabel").innerHTML = ml.t + (ml.s ? `<small>${ml.s}</small>` : "");
 
-    // estado check-in de hoy
     const today = getDay(tISO) || {};
-    setCheck("main", !!today.main);
-    setCheck("kegels", !!today.kegels);
-    setCheck("exercise", !!today.exercise);
+    setCheck("main", !!today.main, false);
+    setCheck("kegels", !!today.kegels, false);
+    setCheck("exercise", !!today.exercise, false);
     $$("#stressScale button").forEach(b=>b.classList.toggle("sel", Number(b.dataset.v)===today.stress));
-    $("#note").value = today.note || "";
+    if(document.activeElement !== $("#note")) $("#note").value = today.note || "";
 
-    // bloquear check-in si aún no empieza el plan
     const beforeStart = t < 1;
-    document.querySelectorAll('.check,.scale button,#note').forEach(el=>{
+    document.querySelectorAll('#checkinTitle ~ .check, #stressScale button, #note').forEach(el=>{
       el.style.pointerEvents = beforeStart ? "none" : "";
       el.style.opacity = beforeStart ? .5 : "";
     });
 
-    // stats
     $("#streak").textContent = currentStreak();
     $("#best").textContent = bestStreak();
     $("#pct").textContent = compliancePct()+"%";
 
-    // mensaje
     renderMessage();
-
-    // calendario
+    renderBackup();
     renderCalendar(t);
-
-    // fases
+    renderMini(t);
+    renderChart(t);
+    renderNotes();
     renderPhases(t);
 
-    // switch discreto
     $("#discreetSwitch").classList.toggle("on", state.discreet);
+    if(selectedISO) renderModal();
   }
 
-  function setCheck(key, on){
-    const el = document.querySelector(`.check[data-key="${key}"]`);
+  function setCheck(key, on, isModal){
+    const sel = isModal ? `.check[data-mkey="${key}"]` : `#checkinTitle ~ .check[data-key="${key}"]`;
+    const el = document.querySelector(sel);
     if(el) el.classList.toggle("on", on);
   }
 
@@ -501,6 +553,21 @@
     if(!m.sticky){ state.seenMsgs[m.id]=true; save(); }
   }
 
+  function renderBackup(){
+    const box = $("#backup");
+    const hasData = Object.keys(state.days).length > 0;
+    if(!hasData){ box.classList.add("hidden"); return; }
+    const since = state.lastBackup ? Math.floor((Date.now()-state.lastBackup)/DAY) : Infinity;
+    if(since >= 7){
+      box.classList.remove("hidden");
+      $("#bkMsg").textContent = state.lastBackup
+        ? `Tu última copia fue hace ${since} días. Guarda una nueva por seguridad.`
+        : "Aún no has guardado ninguna copia. Si pierdes el teléfono, perderías tu historial.";
+    } else {
+      box.classList.add("hidden");
+    }
+  }
+
   function renderCalendar(t){
     const cal = $("#cal");
     cal.innerHTML="";
@@ -509,21 +576,91 @@
       const d = getDay(isoStr);
       const cell = document.createElement("div");
       cell.className="cell";
-      if(n > t){ cell.classList.add("future"); }
+      const future = n>t, before = n<1;
+      if(future){ cell.classList.add("future"); }
       else if(isComplete(d)){ cell.classList.add("done"); }
       else if(isPartial(d) || isMainDone(d)){ cell.classList.add("part"); }
-      if(n === t) cell.classList.add("today");
+      else { cell.classList.add("miss"); }
+      if(n===t) cell.classList.add("today");
       if(PHASES.some(p=>p.from===n)) cell.classList.add("phase-edge");
       cell.textContent = n;
 
-      // tooltip
-      const tip = document.createElement("span");
-      tip.className="tip";
-      let st = n>t ? "por venir" : (isComplete(d) ? "completo" : (isMainDone(d)||isPartial(d) ? "parcial" : "sin marcar"));
-      tip.textContent = `Día ${n} · ${st}`;
-      cell.appendChild(tip);
+      // marcas: ejercicio y kegels (puntitos)
+      if(!future && d && (d.exercise || d.kegels)){
+        const marks=document.createElement("div"); marks.className="marks";
+        if(d.exercise){ const i=document.createElement("i"); marks.appendChild(i); }
+        if(d.kegels){ const i=document.createElement("i"); marks.appendChild(i); }
+        cell.appendChild(marks);
+      }
+
+      if(!future && !before){
+        cell.addEventListener("click", ()=>openModal(isoStr));
+      }
       cal.appendChild(cell);
     }
+  }
+
+  function renderMini(t){
+    const wrap = $("#miniStats");
+    const exStreak = streakFor(predExercise), keStreak = streakFor(predKegels);
+    const exTotal = countFor(predExercise), keTotal = countFor(predKegels);
+    const items = [
+      {v:exStreak, k:"Racha de ejercicio", s:`${exTotal} días en total`},
+      {v:keStreak, k:"Racha de Kegels", s:`${keTotal} días en total`}
+    ];
+    wrap.innerHTML = items.map(i=>`
+      <div class="mini"><div class="mv">${i.v}</div><div class="mk">${i.k}<small>${i.s}</small></div></div>
+    `).join("");
+  }
+
+  function renderChart(t){
+    const svg = $("#stressChart");
+    const last = Math.min(t,90);
+    const vals = [];
+    for(let n=1;n<=last;n++){ const d=getDay(isoForDayNumber(n)); vals.push({n, v:(d&&d.stress)?d.stress:0}); }
+    const have = vals.filter(x=>x.v>0);
+    const empty = $("#chartEmpty");
+    if(have.length===0 || last<1){
+      svg.innerHTML=""; empty.classList.remove("hidden");
+      $("#stressAvg").textContent=""; $("#chartStart").textContent=""; return;
+    }
+    empty.classList.add("hidden");
+    const avg = (have.reduce((s,x)=>s+x.v,0)/have.length);
+    $("#stressAvg").textContent = `promedio ${avg.toFixed(1)} / 5`;
+    $("#chartStart").textContent = "día 1";
+
+    const W=600,H=96,pad=6, n=vals.length;
+    const bw = (W-pad*2)/n;
+    const colorFor = v => v<=2 ? "var(--accent)" : (v===3 ? "var(--accent-2)" : "var(--warn)");
+    let bars="";
+    vals.forEach((x,i)=>{
+      const cx = pad + i*bw;
+      if(x.v>0){
+        const h = (x.v/5)*(H-pad*2);
+        bars += `<rect x="${cx+bw*0.18}" y="${H-pad-h}" width="${Math.max(bw*0.64,1)}" height="${h}" rx="1.5" fill="${colorFor(x.v)}"></rect>`;
+      } else {
+        bars += `<rect x="${cx+bw*0.42}" y="${H-pad-2}" width="${Math.max(bw*0.16,1)}" height="2" rx="1" fill="var(--miss-ring)"></rect>`;
+      }
+    });
+    // linea de promedio
+    const ay = H-pad-(avg/5)*(H-pad*2);
+    bars += `<line x1="${pad}" y1="${ay}" x2="${W-pad}" y2="${ay}" stroke="var(--ink-soft)" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"></line>`;
+    svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+    svg.innerHTML = bars;
+  }
+
+  function renderNotes(){
+    const list = $("#notesList"), empty = $("#notesEmpty");
+    const entries = Object.keys(state.days)
+      .filter(k=>state.days[k].note && state.days[k].note.trim())
+      .sort((a,b)=> a<b?1:-1);
+    if(entries.length===0){ list.innerHTML=""; empty.classList.remove("hidden"); return; }
+    empty.classList.add("hidden");
+    list.innerHTML = entries.map(k=>{
+      const dn = dayNumberOf(k);
+      const txt = state.days[k].note.replace(/[<>&]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+      return `<div class="note-item"><div class="nd">Día ${dn} · ${fmtShort(k)}</div><div class="nt">${txt}</div></div>`;
+    }).join("");
   }
 
   function renderPhases(t){
@@ -542,55 +679,105 @@
     });
   }
 
-  // ---------- interacción ----------
-  function ensureToday(){
-    const k=todayISO();
-    if(!state.days[k]) state.days[k]={main:false,kegels:false,exercise:false,stress:0,note:""};
-    return state.days[k];
+  // ---------- modal detalle ----------
+  function openModal(isoStr){
+    selectedISO = isoStr;
+    renderModal();
+    $("#overlay").classList.add("show");
   }
+  function closeModal(){
+    $("#overlay").classList.remove("show");
+    selectedISO = null;
+  }
+  function renderModal(){
+    if(!selectedISO) return;
+    const dn = dayNumberOf(selectedISO);
+    const d = getDay(selectedISO) || {};
+    const isToday = selectedISO===todayISO();
+    $("#mTitle").textContent = `Día ${dn}` + (isToday ? " · hoy" : "");
+    $("#mSubt").textContent = fmtDate(selectedISO);
+    const ml = mainLabelFor(dn);
+    $("#mMainLabel").innerHTML = ml.t + (ml.s ? `<small>${ml.s}</small>` : "");
+    setCheck("main", !!d.main, true);
+    setCheck("kegels", !!d.kegels, true);
+    setCheck("exercise", !!d.exercise, true);
+    $$("#mStressScale button").forEach(b=>b.classList.toggle("sel", Number(b.dataset.v)===d.stress));
+    if(document.activeElement !== $("#mNote")) $("#mNote").value = d.note || "";
+  }
+
+  // ---------- escritura ----------
+  function ensureDay(isoStr){
+    if(!state.days[isoStr]) state.days[isoStr]={main:false,kegels:false,exercise:false,stress:0,note:""};
+    return state.days[isoStr];
+  }
+  function toggleField(isoStr, key){ const d=ensureDay(isoStr); d[key]=!d[key]; save(); render(); }
+  function setStress(isoStr, v){ const d=ensureDay(isoStr); d.stress=(d.stress===v?0:v); save(); render(); }
+  function setNote(isoStr, txt){ const d=ensureDay(isoStr); d.note=txt; save(); }
+
   function flashSaved(){
     const s=$("#savedMsg"); s.classList.add("show");
     clearTimeout(flashSaved._t); flashSaved._t=setTimeout(()=>s.classList.remove("show"),1200);
   }
 
-  document.querySelectorAll('.check').forEach(c=>{
+  // ---------- interacción: tarjeta de hoy ----------
+  document.querySelectorAll('#checkinTitle ~ .check').forEach(c=>{
     c.addEventListener("click",()=>{
       if(dayNumberOf(todayISO())<1) return;
-      const key=c.dataset.key;
-      const d=ensureToday();
-      d[key]=!d[key];
-      save(); flashSaved(); render();
+      toggleField(todayISO(), c.dataset.key); flashSaved();
     });
   });
   document.querySelectorAll('#stressScale button').forEach(b=>{
     b.addEventListener("click",()=>{
       if(dayNumberOf(todayISO())<1) return;
-      const d=ensureToday();
-      const v=Number(b.dataset.v);
-      d.stress = (d.stress===v ? 0 : v);
-      save(); flashSaved(); render();
+      setStress(todayISO(), Number(b.dataset.v)); flashSaved();
     });
   });
   let noteT;
   $("#note").addEventListener("input",e=>{
     if(dayNumberOf(todayISO())<1) return;
-    const d=ensureToday(); d.note=e.target.value;
-    clearTimeout(noteT); noteT=setTimeout(()=>{save();flashSaved();},400);
+    setNote(todayISO(), e.target.value);
+    clearTimeout(noteT); noteT=setTimeout(()=>{flashSaved(); renderNotes();},400);
   });
 
-  $("#discreetSwitch").addEventListener("click",()=>{
-    state.discreet=!state.discreet; save(); render();
+  // ---------- interacción: modal ----------
+  document.querySelectorAll('.check[data-mkey]').forEach(c=>{
+    c.addEventListener("click",()=>{ if(selectedISO) toggleField(selectedISO, c.dataset.mkey); });
   });
+  document.querySelectorAll('#mStressScale button').forEach(b=>{
+    b.addEventListener("click",()=>{ if(selectedISO) setStress(selectedISO, Number(b.dataset.v)); });
+  });
+  let mNoteT;
+  $("#mNote").addEventListener("input",e=>{
+    if(!selectedISO) return;
+    setNote(selectedISO, e.target.value);
+    clearTimeout(mNoteT); mNoteT=setTimeout(()=>renderNotes(),400);
+  });
+  $("#mClear").addEventListener("click",()=>{
+    if(!selectedISO) return;
+    if(confirm("¿Borrar todo lo registrado en este día?")){
+      delete state.days[selectedISO]; save(); render(); closeModal();
+    }
+  });
+  $("#mDone").addEventListener("click", closeModal);
+  $("#mClose").addEventListener("click", closeModal);
+  $("#overlay").addEventListener("click", e=>{ if(e.target===$("#overlay")) closeModal(); });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape" && selectedISO) closeModal(); });
 
-  // exportar
-  $("#exportBtn").addEventListener("click",()=>{
+  // ---------- ajustes ----------
+  $("#discreetSwitch").addEventListener("click",()=>{ state.discreet=!state.discreet; save(); render(); });
+
+  function doExport(){
     const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
     const url=URL.createObjectURL(blob);
     const a=document.createElement("a");
-    a.href=url; a.download="mi-seguimiento.json"; a.click();
+    const stamp = todayISO();
+    a.href=url; a.download=`mi-seguimiento-${stamp}.json`; a.click();
     URL.revokeObjectURL(url);
-  });
-  // importar
+    state.lastBackup = Date.now(); save(); render();
+  }
+  $("#exportBtn").addEventListener("click", doExport);
+  $("#bkBtn").addEventListener("click", doExport);
+
   $("#importBtn").addEventListener("click",()=>$("#fileInput").click());
   $("#fileInput").addEventListener("change",e=>{
     const f=e.target.files[0]; if(!f) return;
@@ -604,18 +791,14 @@
         }
       }catch(err){ alert("No se pudo leer el archivo."); }
     };
-    r.readAsText(f);
-    e.target.value="";
+    r.readAsText(f); e.target.value="";
   });
-  // cambiar inicio
   $("#startBtn").addEventListener("click",()=>{
-    const cur=state.start;
-    const v=prompt("Fecha de inicio (formato AAAA-MM-DD). Día 1 del plan:", cur);
+    const v=prompt("Fecha de inicio (formato AAAA-MM-DD). Día 1 del plan:", state.start);
     if(!v) return;
     if(!/^\d{4}-\d{2}-\d{2}$/.test(v) || isNaN(parseISO(v).getTime())){ alert("Formato no válido. Usa AAAA-MM-DD."); return; }
     state.start=v; save(); render();
   });
-  // reset
   $("#resetBtn").addEventListener("click",()=>{
     if(confirm("¿Borrar TODO el historial y empezar de cero? Esto no se puede deshacer. (Considera exportar una copia antes.)")){
       const start=state.start, discreet=state.discreet;
@@ -624,7 +807,23 @@
     }
   });
 
+  // ---------- blindaje de memoria ----------
+  async function hardenStorage(){
+    const note=$("#storageNote"), txt=$("#storageTxt");
+    try{
+      if(navigator.storage && navigator.storage.persist){
+        let persisted = await navigator.storage.persisted();
+        if(!persisted) persisted = await navigator.storage.persist();
+        if(persisted){ note.classList.add("ok"); txt.textContent="Almacenamiento protegido en este dispositivo."; }
+        else { txt.textContent="Almacenamiento normal. Respalda tu copia de vez en cuando por seguridad."; }
+      } else {
+        txt.textContent="Respalda tu copia de vez en cuando por seguridad.";
+      }
+    }catch(e){ txt.textContent="Respalda tu copia de vez en cuando por seguridad."; }
+  }
+
   render();
+  hardenStorage();
 })();
 </script>
 </body>
