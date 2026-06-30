@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Mi seguimiento</title>
-<!-- Para que en el celular se abra como app desde la pantalla de inicio -->
 <meta name="theme-color" content="#5b8a72">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -13,30 +12,18 @@
 <meta name="apple-mobile-web-app-title" content="Mi seguimiento">
 <style>
   :root{
-    --bg:#f4f6f8;
-    --card:#ffffff;
-    --ink:#2b3440;
-    --ink-soft:#6b7785;
-    --line:#e6eaef;
-    --accent:#5b8a72;        /* verde calmado */
-    --accent-soft:#e7f0eb;
-    --accent-2:#7a93b8;      /* azul suave */
-    --done:#9cc4ac;
-    --done-strong:#5b8a72;
-    --miss:#eef1f4;
-    --miss-ring:#dfe4ea;
-    --today:#7a93b8;
-    --warn:#d8a657;
-    --warn-soft:#f7eedc;
-    --radius:16px;
-    --shadow:0 1px 2px rgba(43,52,64,.04), 0 6px 20px rgba(43,52,64,.06);
+    --bg:#f4f6f8; --card:#ffffff; --ink:#2b3440; --ink-soft:#6b7785; --line:#e6eaef;
+    --accent:#5b8a72; --accent-soft:#e7f0eb; --accent-2:#7a93b8;
+    --done:#9cc4ac; --done-strong:#5b8a72; --miss:#eef1f4; --miss-ring:#dfe4ea;
+    --today:#7a93b8; --warn:#d8a657; --warn-soft:#f7eedc; --alert:#c97a6d;
+    --radius:16px; --shadow:0 1px 2px rgba(43,52,64,.04), 0 6px 20px rgba(43,52,64,.06);
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --bg:#11161c; --card:#1a212a; --ink:#e7ecf1; --ink-soft:#93a0ad;
-      --line:#283340; --accent:#7fb89a; --accent-soft:#22302a; --accent-2:#8fa9d0;
+      --bg:#11161c; --card:#1a212a; --ink:#e7ecf1; --ink-soft:#93a0ad; --line:#283340;
+      --accent:#7fb89a; --accent-soft:#22302a; --accent-2:#8fa9d0;
       --done:#3d6b53; --done-strong:#7fb89a; --miss:#222b35; --miss-ring:#2c3744;
-      --warn:#d8a657; --warn-soft:#312a1c;
+      --warn:#d8a657; --warn-soft:#312a1c; --alert:#cf8a7d;
       --shadow:0 1px 2px rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.28);
     }
   }
@@ -58,19 +45,22 @@
   .phase-pill{display:inline-block;margin-top:8px;font-size:11px;font-weight:600;background:var(--accent-soft);color:var(--accent);padding:3px 9px;border-radius:999px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
   .card h2{font-size:14px;margin:0 0 14px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+  .hidden{display:none !important}
+
+  /* boton impulso */
+  .urge-btn{width:100%;border:1.5px solid var(--alert);background:transparent;color:var(--alert);font-weight:650;font-size:15px;padding:14px;border-radius:14px;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .12s}
+  .urge-btn:hover{background:var(--alert);color:#fff}
 
   /* aviso respaldo */
   #backup.card{border-left:3px solid var(--warn);background:linear-gradient(180deg,var(--warn-soft),var(--card) 92%);display:flex;align-items:center;gap:12px;justify-content:space-between}
   #backup .bk-txt{font-size:14px}
   #backup .bk-txt b{display:block;font-size:13px;color:var(--warn)}
   #backup button{border:none;background:var(--warn);color:#fff;font-weight:600;font-size:13px;padding:9px 14px;border-radius:9px;cursor:pointer;flex-shrink:0}
-  #backup.hidden{display:none}
 
   /* mensaje aliento */
   #message.card{border-left:3px solid var(--accent);background:linear-gradient(180deg,var(--accent-soft),var(--card) 90%)}
   #message .msg-head{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px;display:flex;align-items:center;gap:7px}
-  #message .msg-body{font-size:15px;color:var(--ink)}
-  #message.hidden{display:none}
+  #message .msg-body{font-size:15px}
 
   /* check-in */
   .check{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer;user-select:none}
@@ -82,19 +72,36 @@
   .check .label{font-size:15px}
   .check .label small{display:block;color:var(--ink-soft);font-size:12px;margin-top:1px}
 
-  .stress{padding-top:14px}
-  .stress .label{font-size:15px;margin-bottom:10px}
-  .stress .label small{display:block;color:var(--ink-soft);font-size:12px}
+  .field{padding:14px 0;border-bottom:1px solid var(--line)}
+  .field:last-child{border-bottom:none}
+  .field .label{font-size:15px;margin-bottom:10px}
+  .field .label small{display:block;color:var(--ink-soft);font-size:12px;margin-top:1px}
   .scale{display:flex;gap:8px}
   .scale button{flex:1;padding:10px 0;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;transition:all .12s}
   .scale button:hover{border-color:var(--accent-2)}
   .scale button.sel{background:var(--accent-2);color:#fff;border-color:var(--accent-2)}
   .scale .ends{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-top:6px}
 
-  textarea{width:100%;margin-top:14px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:14px;resize:vertical;min-height:46px;background:var(--card);color:var(--ink)}
+  /* segmented */
+  .seg{display:flex;gap:8px;flex-wrap:wrap}
+  .seg button{flex:1;min-width:88px;padding:10px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:14px;font-weight:600;cursor:pointer;transition:all .12s}
+  .seg button:hover{border-color:var(--accent-2)}
+  .seg button.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .seg button.sel.warm{background:var(--alert);border-color:var(--alert)}
+  .seg button.sel.neutral{background:var(--ink-soft);border-color:var(--ink-soft)}
+
+  /* stepper */
+  .stepper{display:flex;align-items:center;gap:14px}
+  .stepper button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:20px;cursor:pointer}
+  .stepper button:hover{border-color:var(--accent-2)}
+  .stepper .sv{font-size:18px;font-weight:700;min-width:64px;text-align:center}
+  .stepper .sv small{display:block;font-size:11px;color:var(--ink-soft);font-weight:400}
+
+  textarea{width:100%;margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:14px;resize:vertical;min-height:46px;background:var(--card);color:var(--ink)}
   textarea:focus{outline:none;border-color:var(--accent-2)}
   .saved{font-size:12px;color:var(--accent);height:16px;margin-top:8px;opacity:0;transition:opacity .3s}
   .saved.show{opacity:1}
+  .more-link{margin-top:14px;font-size:13px;color:var(--accent-2);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
 
   /* stats */
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
@@ -114,36 +121,76 @@
   .cal{display:grid;grid-template-columns:repeat(10,1fr);gap:7px}
   .cell{aspect-ratio:1;border-radius:7px;background:var(--miss);border:1px solid var(--miss-ring);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft);cursor:pointer;transition:transform .1s;position:relative}
   .cell.future{background:transparent;border-style:dashed;color:var(--miss-ring);cursor:default}
-  .cell.before{opacity:.4;cursor:default}
   .cell.part{background:var(--done);border-color:var(--done);color:#fff}
   .cell.done{background:var(--done-strong);border-color:var(--done-strong);color:#fff}
   .cell.today{outline:2px solid var(--today);outline-offset:1px}
   .cell.phase-edge{box-shadow:inset 3px 0 0 var(--accent-2)}
-  .cell:not(.future):not(.before):hover{transform:scale(1.12);z-index:2}
+  .cell:not(.future):hover{transform:scale(1.12);z-index:2}
   .cell .marks{position:absolute;bottom:2px;display:flex;gap:2px}
   .cell .marks i{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.85)}
   .cell.miss .marks i{background:var(--ink-soft)}
 
-  /* historial / analisis */
-  .mini-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:6px}
+  /* mini stats */
+  .mini-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
   .mini{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px}
   .mini .mv{font-size:20px;font-weight:700;color:var(--accent);line-height:1}
   .mini .mk{font-size:12px;color:var(--ink-soft)}
   .mini .mk small{display:block;font-size:11px}
 
-  .chart-wrap{margin-top:6px}
+  /* marcadores */
+  .marker{margin-bottom:18px}
+  .marker:last-child{margin-bottom:0}
+  .marker .mh{font-size:13px;font-weight:600;margin-bottom:8px;display:flex;justify-content:space-between}
+  .marker .mh span:last-child{color:var(--ink-soft);font-weight:400;font-size:12px}
+  .am-dots{display:flex;flex-wrap:wrap;gap:4px}
+  .am-dots i{width:11px;height:11px;border-radius:3px;background:var(--miss);border:1px solid var(--miss-ring)}
+  .am-dots i.yes{background:var(--accent);border-color:var(--accent)}
+  .am-dots i.no{background:var(--alert);border-color:var(--alert);opacity:.55}
+  .bars2{display:flex;flex-direction:column;gap:8px}
+  .bar2{display:flex;align-items:center;gap:10px;font-size:13px}
+  .bar2 .bl{width:96px;flex-shrink:0;color:var(--ink-soft)}
+  .bar2 .bt{flex:1;height:14px;border-radius:7px;background:var(--miss);overflow:hidden}
+  .bar2 .bt i{display:block;height:100%;border-radius:7px}
+  .bar2 .bv{width:28px;text-align:right;font-weight:600}
+
+  /* chart */
   .chart-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
   .chart-head .avg{font-size:12px;color:var(--ink-soft)}
   .chart{width:100%;height:96px;display:block}
   .chart-x{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-soft);margin-top:4px}
   .empty{font-size:13px;color:var(--ink-soft);padding:8px 0}
 
+  /* notas */
   .notes-list{display:flex;flex-direction:column;gap:10px;max-height:280px;overflow:auto}
   .note-item{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
   .note-item .nd{font-size:11px;color:var(--ink-soft);margin-bottom:3px;text-transform:uppercase;letter-spacing:.03em}
   .note-item .nt{font-size:14px;white-space:pre-wrap;word-break:break-word}
 
-  /* fases resumen */
+  /* guias colapsables */
+  details.guide{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
+  details.guide>summary{list-style:none;cursor:pointer;padding:16px 18px;font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  details.guide>summary::-webkit-details-marker{display:none}
+  details.guide>summary .chev{color:var(--ink-soft);transition:transform .15s}
+  details.guide[open]>summary .chev{transform:rotate(90deg)}
+  .guide-body{padding:0 18px 18px;font-size:14px}
+  .guide-body ul{margin:8px 0;padding-left:20px}
+  .guide-body li{margin:5px 0}
+  .guide-body .warnbox{background:var(--warn-soft);border-radius:10px;padding:10px 12px;font-size:13px;margin-top:10px;border-left:3px solid var(--warn)}
+  .ex-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .ex-chip{background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px}
+
+  /* kegel timer */
+  .kt{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:14px;padding:16px;background:var(--bg);border-radius:14px}
+  .kt-circle{width:120px;height:120px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;transition:transform 3s ease,background 3s ease;transform:scale(.7)}
+  .kt-circle.contract{transform:scale(1);background:var(--accent)}
+  .kt-circle.relax{transform:scale(.62);background:var(--accent-soft)}
+  .kt-circle span{font-size:15px;font-weight:700;color:var(--ink)}
+  .kt-circle.contract span{color:#fff}
+  .kt-meta{font-size:13px;color:var(--ink-soft);font-weight:600}
+  .kt button{border:none;background:var(--accent);color:#fff;font-weight:600;font-size:14px;padding:10px 22px;border-radius:10px;cursor:pointer}
+  .kt button.stop{background:var(--alert)}
+
+  /* fases */
   .phases{display:flex;flex-direction:column;gap:8px}
   .prow{display:flex;align-items:center;gap:12px;font-size:13px;padding:6px 0}
   .prow .pn{width:54px;font-weight:600;flex-shrink:0}
@@ -166,11 +213,11 @@
   .switch.on .toggle{background:var(--accent)}
   .switch.on .toggle i{transform:translateX(18px)}
 
-  /* modal detalle de dia */
+  /* overlays */
   .overlay{position:fixed;inset:0;background:rgba(20,26,33,.55);backdrop-filter:blur(2px);display:flex;align-items:flex-end;justify-content:center;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s}
   .overlay.show{opacity:1;pointer-events:auto}
   @media(min-width:560px){.overlay{align-items:center}}
-  .modal{background:var(--card);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -8px 40px rgba(0,0,0,.25);transform:translateY(20px);transition:transform .18s;max-height:88vh;overflow:auto}
+  .modal{background:var(--card);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -8px 40px rgba(0,0,0,.25);transform:translateY(20px);transition:transform .18s;max-height:90vh;overflow:auto}
   @media(min-width:560px){.modal{border-radius:18px}}
   .overlay.show .modal{transform:translateY(0)}
   .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
@@ -180,6 +227,16 @@
   .modal-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px}
   .modal-foot .mclear{border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:13px;padding:8px 12px;border-radius:9px;cursor:pointer}
   .modal-foot .mdone{border:none;background:var(--accent);color:#fff;font-weight:600;font-size:14px;padding:10px 20px;border-radius:10px;cursor:pointer}
+  .enc-box{margin-top:12px;padding:12px;background:var(--bg);border-radius:12px}
+
+  /* impulso overlay */
+  .urge-modal . utitle{font-size:19px;font-weight:700;margin-bottom:6px}
+  .urge-modal .ucount{font-size:60px;font-weight:800;color:var(--accent);text-align:center;line-height:1;margin:6px 0}
+  .urge-modal .usug{background:var(--accent-soft);border-radius:12px;padding:14px;font-size:15px;margin:12px 0;font-weight:600;color:var(--ink)}
+  .urge-modal .ubody{font-size:14px;color:var(--ink-soft)}
+  .urge-modal .ubtns{display:flex;gap:10px;margin-top:16px}
+  .urge-modal .ubtns button{flex:1;padding:12px;border-radius:11px;font-weight:600;font-size:14px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+  .urge-modal .ubtns .prim{background:var(--accent);color:#fff;border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -196,6 +253,8 @@
       <div class="phase-pill" id="phasePill">Fase 1</div>
     </div>
   </header>
+
+  <button class="urge-btn" id="urgeBtn">● Tengo el impulso</button>
 
   <div class="card hidden" id="backup">
     <div class="bk-txt"><b>Respalda tu progreso</b><span id="bkMsg"></span></div>
@@ -221,17 +280,16 @@
       <div class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="label">Ejercicio del día</div>
     </div>
-
-    <div class="stress">
+    <div class="field" style="border-bottom:none">
       <div class="label">Nivel de estrés / ansiedad<small>¿cómo estuvo el día?</small></div>
       <div class="scale" id="stressScale">
         <button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button>
       </div>
       <div class="ends"><span>tranquilo</span><span>muy tenso</span></div>
     </div>
-
     <textarea id="note" placeholder="Nota del día (opcional)…"></textarea>
     <div class="saved" id="savedMsg">Guardado ✓</div>
+    <div class="more-link" id="moreToday">+ Registrar más detalles de hoy</div>
   </div>
 
   <div class="stats">
@@ -248,7 +306,7 @@
       <span><i class="dot d-miss"></i> Sin marcar</span>
       <span><i class="dot d-future"></i> Por venir</span>
     </div>
-    <div class="cal-hint">Toca cualquier día para ver o editar lo que registraste.</div>
+    <div class="cal-hint">Toca cualquier día para ver o editar todo lo de ese día.</div>
     <div class="cal" id="cal"></div>
   </div>
 
@@ -258,20 +316,60 @@
   </div>
 
   <div class="card">
+    <h2 id="markersTitle">Marcadores</h2>
+    <div id="markers"></div>
+  </div>
+
+  <div class="card">
     <h2>Estrés en el tiempo</h2>
-    <div class="chart-wrap">
-      <div class="chart-head"><span style="font-size:12px;color:var(--ink-soft)">1 = tranquilo · 5 = muy tenso</span><span class="avg" id="stressAvg"></span></div>
-      <svg class="chart" id="stressChart" preserveAspectRatio="none"></svg>
-      <div class="chart-x"><span id="chartStart"></span><span id="chartEnd">hoy</span></div>
-      <div class="empty hidden" id="chartEmpty">Aún no hay registros de estrés. Aparecerán aquí cuando marques el nivel de tu día.</div>
-    </div>
+    <div class="chart-head"><span style="font-size:12px;color:var(--ink-soft)">1 = tranquilo · 5 = muy tenso</span><span class="avg" id="stressAvg"></span></div>
+    <svg class="chart" id="stressChart" preserveAspectRatio="none"></svg>
+    <div class="chart-x"><span id="chartStart"></span><span>hoy</span></div>
+    <div class="empty hidden" id="chartEmpty">Aún no hay registros de estrés. Aparecerán cuando marques el nivel de tu día.</div>
   </div>
 
   <div class="card">
     <h2>Diario de notas</h2>
     <div class="notes-list" id="notesList"></div>
-    <div class="empty hidden" id="notesEmpty">Las notas que escribas en tus check-ins aparecerán aquí, de la más reciente a la más antigua.</div>
+    <div class="empty hidden" id="notesEmpty">Las notas de tus check-ins aparecerán aquí, de la más reciente a la más antigua.</div>
   </div>
+
+  <!-- GUIAS -->
+  <details class="guide">
+    <summary><span>🧘 Cómo hacer los Kegels (guía + temporizador)</span><span class="chev">›</span></summary>
+    <div class="guide-body">
+      <ul>
+        <li><b>Identifica el músculo:</b> el que usarías para cortar el chorro de orina (sin apretar glúteos ni abdomen).</li>
+        <li><b>Ritmo:</b> 3 segundos contrae / 3 segundos relaja.</li>
+        <li><b>Dosis:</b> 10-15 repeticiones, 3 veces al día.</li>
+        <li><b>Respira normal</b> durante el ejercicio, no aguantes el aire.</li>
+      </ul>
+      <div class="warnbox">⚠️ No te excedas de esa dosis. Hacer demasiados puede generar tensión pélvica (hipertonía) y empeorar el cuadro. Más no es mejor.</div>
+      <div class="kt">
+        <div class="kt-circle" id="ktCircle"><span id="ktPhase">Listo</span></div>
+        <div class="kt-meta" id="ktMeta">Serie de 10 repeticiones · 3s / 3s</div>
+        <button id="ktBtn">Iniciar guía</button>
+      </div>
+    </div>
+  </details>
+
+  <details class="guide">
+    <summary><span>🏋️ Ejercicio recomendado</span><span class="chev">›</span></summary>
+    <div class="guide-body">
+      <p>Tu plan prioriza el trabajo que mejora la <b>circulación pélvica</b>. Mantén tu rutina, dando peso a:</p>
+      <div class="ex-grid">
+        <span class="ex-chip">Sentadilla</span><span class="ex-chip">Peso muerto</span>
+        <span class="ex-chip">Hip thrust / glúteo</span><span class="ex-chip">Trabajo de cadera</span>
+      </div>
+      <p style="margin-top:14px"><b>Mini-rutina en casa</b> (para días flojos o como reemplazo ante un impulso):</p>
+      <ul>
+        <li>10-15 sentadillas</li>
+        <li>10 lagartijas (flexiones)</li>
+        <li>30-45 seg de plancha</li>
+      </ul>
+      <div class="warnbox" style="background:var(--accent-soft);border-left-color:var(--accent)">El ejercicio que ya haces es uno de tus puntos a favor. La meta es sostenerlo, no exagerarlo.</div>
+    </div>
+  </details>
 
   <div class="card">
     <h2>Fases</h2>
@@ -302,14 +400,11 @@
 
 </div>
 
-<!-- modal de detalle / edición de un día -->
+<!-- MODAL DETALLE DE DÍA -->
 <div class="overlay" id="overlay">
   <div class="modal" id="modal">
     <div class="modal-head">
-      <div>
-        <div class="mtitle" id="mTitle">Día</div>
-        <div class="msubt" id="mSubt"></div>
-      </div>
+      <div><div class="mtitle" id="mTitle">Día</div><div class="msubt" id="mSubt"></div></div>
       <button class="mclose" id="mClose" aria-label="Cerrar">✕</button>
     </div>
 
@@ -326,12 +421,65 @@
       <div class="label">Ejercicio del día</div>
     </div>
 
-    <div class="stress">
+    <div class="field">
       <div class="label">Nivel de estrés / ansiedad</div>
       <div class="scale" id="mStressScale">
         <button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button>
       </div>
       <div class="ends"><span>tranquilo</span><span>muy tenso</span></div>
+    </div>
+
+    <div class="field">
+      <div class="label" id="mMastLabel">Masturbación<small>lo que importa es de dónde viene la excitación, no la actividad</small></div>
+      <div class="seg" id="mMast">
+        <button data-mast="none">No</button>
+        <button data-mast="noporn" data-style="ok">Sí, sin porno</button>
+        <button data-mast="porn" data-style="warm">Sí, con porno</button>
+      </div>
+      <div id="mMastFlagWrap" class="hidden" style="margin-top:12px">
+        <div class="check" data-mkey="mastFlag" style="border:none;padding:6px 0">
+          <div class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="label" id="mFlagLabel">Necesité fantasear con escenas tipo porno<small>no es retroceso, es información del reentrenamiento</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="label" id="mMorningLabel">Erección matutina / nocturna<small>marcador físico — útil de revisar a lo largo de semanas</small></div>
+      <div class="seg" id="mMorning">
+        <button data-am="yes" data-style="ok">Sí</button>
+        <button data-am="no" data-style="warm">No</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="label">Alcohol del día</div>
+      <div class="stepper">
+        <button id="alcMinus">−</button>
+        <div class="sv"><span id="alcVal">0</span><small>tragos</small></div>
+        <button id="alcPlus">+</button>
+      </div>
+    </div>
+
+    <div class="field" style="border-bottom:none">
+      <div class="check" data-mkey="_enc" id="encToggle" style="border:none;padding:6px 0">
+        <div class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="label">Hubo un encuentro con pareja</div>
+      </div>
+      <div class="enc-box hidden" id="encBox">
+        <div class="label" style="font-size:14px;margin-bottom:8px">Ansiedad anticipatoria</div>
+        <div class="scale" id="encAnx">
+          <button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button>
+        </div>
+        <div class="ends" style="margin-bottom:12px"><span>tranquilo</span><span>muy ansioso</span></div>
+        <div class="label" style="font-size:14px;margin-bottom:8px">¿Cómo fue?</div>
+        <div class="seg" id="encOut">
+          <button data-o="bien" data-style="ok">Bien</button>
+          <button data-o="reg" data-style="neutral">Regular</button>
+          <button data-o="dif" data-style="warm">Difícil</button>
+        </div>
+        <textarea id="encNote" placeholder="Nota del encuentro (opcional)…"></textarea>
+      </div>
     </div>
 
     <textarea id="mNote" placeholder="Nota del día (opcional)…"></textarea>
@@ -343,41 +491,52 @@
   </div>
 </div>
 
+<!-- OVERLAY IMPULSO -->
+<div class="overlay" id="urgeOverlay">
+  <div class="modal urge-modal">
+    <div class="utitle">Espera 30 segundos</div>
+    <div class="ubody">El impulso casi siempre dura pocos minutos. Si le quitas el gatillo automático (sentado + teléfono en mano), baja solo.</div>
+    <div class="usug" id="urgeSug"></div>
+    <div class="ubody">Cuando lo hagas, vuelve y márcalo. Llevas:</div>
+    <div class="ucount" id="urgeCount">0</div>
+    <div class="ubody" style="text-align:center">impulsos manejados</div>
+    <div class="ubtns">
+      <button id="urgeClose">Cerrar</button>
+      <button class="prim" id="urgeDone">Hice la pausa ✓</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
   const KEY = "recovery_tracker_v1";
   const DAY = 86400000;
 
-  // ---------- estado ----------
   const defaults = {
-    start: "2026-06-29",     // fecha de inicio (día 1)
+    start: "2026-06-29",
     discreet: true,
-    days: {},                // { "YYYY-MM-DD": {main,kegels,exercise,stress,note} }
-    seenMsgs: {},            // mensajes ya mostrados (para no repetir hitos)
-    lastBackup: 0            // epoch ms del último respaldo (0 = nunca)
+    days: {},          // {iso:{main,kegels,exercise,stress,note,mast,mastFlag,morning,alcohol,enc}}
+    seenMsgs: {},
+    lastBackup: 0,
+    urges: {}          // {iso: count}
   };
   let state = load();
-  let selectedISO = null;    // día abierto en el modal
+  let selectedISO = null;
 
   function load(){
-    try{
-      const raw = localStorage.getItem(KEY);
-      if(!raw) return structuredClone(defaults);
-      const p = JSON.parse(raw);
-      return Object.assign(structuredClone(defaults), p);
+    try{ const raw=localStorage.getItem(KEY); if(!raw) return structuredClone(defaults);
+      return Object.assign(structuredClone(defaults), JSON.parse(raw));
     }catch(e){ return structuredClone(defaults); }
   }
   function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 
-  // ---------- fechas ----------
   function todayISO(){ return iso(new Date()); }
   function iso(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
   function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
-  function dayNumberOf(isoStr){ return Math.round((parseISO(isoStr) - parseISO(state.start))/DAY) + 1; }
+  function dayNumberOf(isoStr){ return Math.round((parseISO(isoStr)-parseISO(state.start))/DAY)+1; }
   function isoForDayNumber(n){ const d=parseISO(state.start); d.setDate(d.getDate()+(n-1)); return iso(d); }
 
-  // ---------- fases ----------
   const PHASES = [
     {n:1, label:"Fase 1", from:1,  to:14, name:"Reducción progresiva"},
     {n:2, label:"Fase 2", from:15, to:28, name:"Espaciar más"},
@@ -385,11 +544,7 @@
     {n:4, label:"Fase 4", from:57, to:90, name:"Consolidación"}
   ];
   const CHECKPOINTS = [14,30,60,90];
-  function phaseForDay(n){
-    if(n < 1) return PHASES[0];
-    for(const p of PHASES){ if(n >= p.from && n <= p.to) return p; }
-    return PHASES[PHASES.length-1];
-  }
+  function phaseForDay(n){ if(n<1) return PHASES[0]; for(const p of PHASES){ if(n>=p.from&&n<=p.to) return p; } return PHASES[3]; }
   function mainLabelFor(n){
     const p = phaseForDay(n).n;
     if(state.discreet) return {t:"Día cumplido", s:"según el objetivo de hoy"};
@@ -399,431 +554,361 @@
     return {t:"Día sin pornografía", s:"mantener cero / muy controlado"};
   }
 
-  // ---------- helpers de datos ----------
   function getDay(isoStr){ return state.days[isoStr] || null; }
   function isComplete(d){ return d && d.main && d.kegels && d.exercise; }
   function isPartial(d){ return d && (d.main || d.kegels || d.exercise) && !isComplete(d); }
   function isMainDone(d){ return !!(d && d.main); }
-  function hasAny(d){ return d && (d.main||d.kegels||d.exercise||d.stress||(d.note&&d.note.trim())); }
 
-  // racha genérica según un predicado, terminando hoy (o ayer si hoy aún sin marcar)
   function streakFor(pred){
-    const t = dayNumberOf(todayISO());
-    let n = t;
-    if(!pred(getDay(isoForDayNumber(t)))) n = t-1;
-    let c = 0;
-    while(n >= 1){ if(pred(getDay(isoForDayNumber(n)))){ c++; n--; } else break; }
-    return c;
+    const t=dayNumberOf(todayISO()); let n=t;
+    if(!pred(getDay(isoForDayNumber(t)))) n=t-1;
+    let c=0; while(n>=1){ if(pred(getDay(isoForDayNumber(n)))){c++;n--;} else break; } return c;
   }
-  const predMain     = d => !!(d && d.main);
-  const predExercise = d => !!(d && d.exercise);
-  const predKegels   = d => !!(d && d.kegels);
-
+  const predMain=d=>!!(d&&d.main), predExercise=d=>!!(d&&d.exercise), predKegels=d=>!!(d&&d.kegels);
   function currentStreak(){ return streakFor(predMain); }
   function bestStreak(){
-    const t = Math.max(dayNumberOf(todayISO()),1);
-    let best=0, run=0;
-    for(let n=1;n<=t;n++){ if(predMain(getDay(isoForDayNumber(n)))){ run++; best=Math.max(best,run); } else run=0; }
-    return best;
+    const t=Math.max(dayNumberOf(todayISO()),1); let best=0,run=0;
+    for(let n=1;n<=t;n++){ if(predMain(getDay(isoForDayNumber(n)))){run++;best=Math.max(best,run);} else run=0; } return best;
   }
   function countFor(pred){
-    const t = Math.min(dayNumberOf(todayISO()),90);
-    let c=0; for(let n=1;n<=t;n++){ if(pred(getDay(isoForDayNumber(n)))) c++; } return c;
+    const t=Math.min(dayNumberOf(todayISO()),90); let c=0;
+    for(let n=1;n<=t;n++){ if(pred(getDay(isoForDayNumber(n)))) c++; } return c;
   }
   function compliancePct(){
-    const t = Math.min(dayNumberOf(todayISO()), 90);
-    if(t < 1) return 0;
-    let done=0; for(let n=1;n<=t;n++){ if(predMain(getDay(isoForDayNumber(n)))) done++; }
-    return Math.round(done/t*100);
+    const t=Math.min(dayNumberOf(todayISO()),90); if(t<1) return 0;
+    let done=0; for(let n=1;n<=t;n++){ if(predMain(getDay(isoForDayNumber(n)))) done++; } return Math.round(done/t*100);
   }
+  function totalUrges(){ return Object.values(state.urges).reduce((s,v)=>s+v,0); }
 
-  // ---------- mensajes de aliento ----------
+  // ---------- mensajes ----------
   function pickMessage(){
-    const t = dayNumberOf(todayISO());
-    if(t < 1) return null;
-    const streak = currentStreak();
-    const today = getDay(todayISO());
-    const yest = getDay(isoForDayNumber(t-1));
-    const H = state.discreet ? "hábito" : "proceso";
-    const candidates = [];
-
+    const t=dayNumberOf(todayISO()); if(t<1) return null;
+    const streak=currentStreak(), today=getDay(todayISO()), yest=getDay(isoForDayNumber(t-1));
+    const H=state.discreet?"hábito":"proceso"; const c=[];
     if(CHECKPOINTS.includes(t) && isMainDone(today)){
-      const cp = {
-        14:{title:"Checkpoint · Día 14", body:"Cerraste las primeras dos semanas. No se trata de que haya sido perfecto, sino de que arrancaste y sostuviste. Revisa: ¿lograste bajar la frecuencia? Si sí, ahora toca estirar el intervalo. Si no, ajusta los bloqueos y sigue — no es fracaso."},
-        30:{title:"Checkpoint · Día 30", body:"Un mes. A esta altura los reemplazos ante el aburrimiento o el estrés deberían sentirse más automáticos. Mira el promedio general, no los días sueltos: la tendencia es lo que importa."},
-        60:{title:"Checkpoint · Día 60", body:"Dos meses sostenidos. Si hubo algún encuentro real, lo clave no es si todo salió perfecto, sino cómo manejaste la ansiedad anticipatoria. Vas en la parte de consolidar."},
-        90:{title:"Checkpoint · Día 90", body:"Llegaste al final del plan. Si hay mejora clara, el camino es mantener los hábitos a largo plazo. Si no la hay del todo, no es fracaso del plan: es información útil para dar el siguiente paso (revisión médica / terapeuta). Cualquiera de los dos casos es avance real."}
-      }[t];
-      candidates.push({id:"cp"+t, icon:"◆", ...cp, sticky:true});
+      const cp={14:{title:"Checkpoint · Día 14",body:"Cerraste las primeras dos semanas. No se trata de que haya sido perfecto, sino de que arrancaste y sostuviste. ¿Lograste bajar la frecuencia? Si sí, ahora toca estirar el intervalo. Si no, ajusta los bloqueos y sigue — no es fracaso."},30:{title:"Checkpoint · Día 30",body:"Un mes. A esta altura los reemplazos ante el aburrimiento o el estrés deberían sentirse más automáticos. Mira el promedio general, no los días sueltos."},60:{title:"Checkpoint · Día 60",body:"Dos meses sostenidos. Si hubo algún encuentro real, lo clave no es si todo salió perfecto, sino cómo manejaste la ansiedad anticipatoria."},90:{title:"Checkpoint · Día 90",body:"Llegaste al final del plan. Si hay mejora clara, mantén los hábitos. Si no la hay del todo, no es fracaso: es información para el siguiente paso (revisión médica / terapeuta)."}}[t];
+      c.push({id:"cp"+t,icon:"◆",...cp,sticky:true});
     }
-
-    const milestones = {3:"3 días",7:"7 días",14:"14 días",21:"21 días",30:"30 días",60:"60 días",90:"90 días"};
-    if(milestones[streak]){
-      let body;
-      if(streak===7) body = `Una semana completa. La primera semana es la más dura — la de mayor impulso — y ya la pasaste. Lo que viene es sostener, que cuesta menos que arrancar.`;
-      else if(streak===3) body = `Tres días seguidos. El arranque siempre es lo más pesado; ya rompiste la inercia.`;
-      else if(streak===21) body = `21 días. A esta altura el ${H} empieza a sentirse menos como esfuerzo y más como costumbre.`;
-      else if(streak===30) body = `30 días de racha. Esto ya no es voluntad pura, es un patrón nuevo instalándose.`;
-      else if(streak===60) body = `60 días seguidos. Muy poca gente llega aquí. Lo estás sosteniendo de verdad.`;
-      else if(streak===90) body = `90 días. Cerraste el ciclo completo. Esto cambia la base desde la que sigues.`;
-      else body = `${milestones[streak]} de racha. Sigue sumando, un día a la vez.`;
-      candidates.push({id:"ms"+streak, icon:"▲", title:`Racha de ${milestones[streak]}`, body});
+    const ms={3:"3 días",7:"7 días",14:"14 días",21:"21 días",30:"30 días",60:"60 días",90:"90 días"};
+    if(ms[streak]){
+      let b;
+      if(streak===7) b="Una semana completa. La primera semana es la más dura — la de mayor impulso — y ya la pasaste. Lo que viene es sostener, que cuesta menos que arrancar.";
+      else if(streak===3) b="Tres días seguidos. El arranque siempre es lo más pesado; ya rompiste la inercia.";
+      else if(streak===21) b=`21 días. A esta altura el ${H} empieza a sentirse menos como esfuerzo y más como costumbre.`;
+      else if(streak===30) b="30 días de racha. Esto ya no es voluntad pura, es un patrón nuevo instalándose.";
+      else if(streak===60) b="60 días seguidos. Muy poca gente llega aquí. Lo estás sosteniendo de verdad.";
+      else if(streak===90) b="90 días. Cerraste el ciclo completo.";
+      else b=`${ms[streak]} de racha. Sigue sumando, un día a la vez.`;
+      c.push({id:"ms"+streak,icon:"▲",title:`Racha de ${ms[streak]}`,body:b});
     }
-
-    if(yest && !isMainDone(yest) && isMainDone(today) && t>1){
-      candidates.push({id:"recover"+todayISO(), icon:"↻", title:"Lo retomaste", body:"Ayer no salió y hoy volviste. Eso es exactamente lo que importa: lo que sostiene el avance no es la perfección, es retomar rápido. Un día suelto no borra el promedio."});
-    }
-    if(t===1 && isMainDone(today)){
-      candidates.push({id:"start", icon:"○", title:"Día 1 hecho", body:"Empezaste. El primer check es el más importante porque convierte la intención en algo real. Nos vemos mañana."});
-    }
-
-    candidates.sort((a,b)=>{
-      const order = {cp:0, ms:1, recover:2, start:3};
-      const ka = a.id.replace(/[0-9-].*$/,""), kb = b.id.replace(/[0-9-].*$/,"");
-      return (order[ka]??9)-(order[kb]??9);
-    });
-    for(const c of candidates){ if(state.seenMsgs[c.id] && !c.sticky) continue; return c; }
-    return candidates.find(c=>c.sticky) || null;
+    if(yest && !isMainDone(yest) && isMainDone(today) && t>1)
+      c.push({id:"recover"+todayISO(),icon:"↻",title:"Lo retomaste",body:"Ayer no salió y hoy volviste. Eso es lo que importa: lo que sostiene el avance no es la perfección, es retomar rápido. Un día suelto no borra el promedio."});
+    if(t===1 && isMainDone(today))
+      c.push({id:"start",icon:"○",title:"Día 1 hecho",body:"Empezaste. El primer check es el más importante porque convierte la intención en algo real."});
+    c.sort((a,b)=>{const o={cp:0,ms:1,recover:2,start:3};const ka=a.id.replace(/[0-9-].*$/,""),kb=b.id.replace(/[0-9-].*$/,"");return (o[ka]??9)-(o[kb]??9);});
+    for(const x of c){ if(state.seenMsgs[x.id] && !x.sticky) continue; return x; }
+    return c.find(x=>x.sticky) || null;
   }
 
-  // ---------- render ----------
-  const $ = s => document.querySelector(s);
-  const $$ = s => document.querySelectorAll(s);
+  // ---------- helpers UI ----------
+  const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
   const MONTHS=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
   const WD=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
-  function fmtDate(isoStr){ const d=parseISO(isoStr); return `${WD[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; }
-  function fmtShort(isoStr){ const d=parseISO(isoStr); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; }
+  function fmtDate(s){ const d=parseISO(s); return `${WD[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; }
+  function fmtShort(s){ const d=parseISO(s); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; }
+  function esc(s){ return s.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
 
   function render(){
-    const tISO = todayISO();
-    const t = dayNumberOf(tISO);
-    const ph = phaseForDay(t);
-
-    $("#appTitle").textContent = state.discreet ? "Mi seguimiento" : "Seguimiento de progreso";
+    const tISO=todayISO(), t=dayNumberOf(tISO), ph=phaseForDay(t);
+    $("#appTitle").textContent = state.discreet?"Mi seguimiento":"Seguimiento de progreso";
     $("#dateSub").textContent = fmtDate(tISO);
-    $("#dayNum").textContent = (t>=1 && t<=90) ? t : (t<1 ? "—" : "✓");
-    $("#phasePill").textContent = state.discreet ? ("Etapa "+ph.n) : (ph.label+" · "+ph.name);
+    $("#dayNum").textContent = (t>=1&&t<=90)?t:(t<1?"—":"✓");
+    $("#phasePill").textContent = state.discreet?("Etapa "+ph.n):(ph.label+" · "+ph.name);
+    const ml=mainLabelFor(t);
+    $("#mainLabel").innerHTML = ml.t + (ml.s?`<small>${ml.s}</small>`:"");
 
-    const ml = mainLabelFor(t);
-    $("#mainLabel").innerHTML = ml.t + (ml.s ? `<small>${ml.s}</small>` : "");
+    const today=getDay(tISO)||{};
+    setCheck("main",!!today.main,false); setCheck("kegels",!!today.kegels,false); setCheck("exercise",!!today.exercise,false);
+    $$("#stressScale button").forEach(b=>b.classList.toggle("sel",Number(b.dataset.v)===today.stress));
+    if(document.activeElement!==$("#note")) $("#note").value = today.note||"";
 
-    const today = getDay(tISO) || {};
-    setCheck("main", !!today.main, false);
-    setCheck("kegels", !!today.kegels, false);
-    setCheck("exercise", !!today.exercise, false);
-    $$("#stressScale button").forEach(b=>b.classList.toggle("sel", Number(b.dataset.v)===today.stress));
-    if(document.activeElement !== $("#note")) $("#note").value = today.note || "";
+    const before=t<1;
+    $$('#checkinTitle ~ .check, #stressScale button, #note').forEach(el=>{ el.style.pointerEvents=before?"none":""; el.style.opacity=before?.5:""; });
 
-    const beforeStart = t < 1;
-    document.querySelectorAll('#checkinTitle ~ .check, #stressScale button, #note').forEach(el=>{
-      el.style.pointerEvents = beforeStart ? "none" : "";
-      el.style.opacity = beforeStart ? .5 : "";
-    });
+    $("#streak").textContent=currentStreak(); $("#best").textContent=bestStreak(); $("#pct").textContent=compliancePct()+"%";
+    $("#urgeCount").textContent=totalUrges();
 
-    $("#streak").textContent = currentStreak();
-    $("#best").textContent = bestStreak();
-    $("#pct").textContent = compliancePct()+"%";
-
-    renderMessage();
-    renderBackup();
-    renderCalendar(t);
-    renderMini(t);
-    renderChart(t);
-    renderNotes();
-    renderPhases(t);
-
-    $("#discreetSwitch").classList.toggle("on", state.discreet);
+    renderMessage(); renderBackup(); renderCalendar(t); renderMini(t); renderMarkers(t); renderChart(t); renderNotes(); renderPhases(t);
+    $("#discreetSwitch").classList.toggle("on",state.discreet);
     if(selectedISO) renderModal();
   }
 
-  function setCheck(key, on, isModal){
-    const sel = isModal ? `.check[data-mkey="${key}"]` : `#checkinTitle ~ .check[data-key="${key}"]`;
-    const el = document.querySelector(sel);
-    if(el) el.classList.toggle("on", on);
+  function setCheck(key,on,isModal){
+    const el=document.querySelector(isModal?`.check[data-mkey="${key}"]`:`#checkinTitle ~ .check[data-key="${key}"]`);
+    if(el) el.classList.toggle("on",on);
   }
-
   function renderMessage(){
-    const m = pickMessage();
-    const box = $("#message");
+    const m=pickMessage(), box=$("#message");
     if(!m){ box.classList.add("hidden"); return; }
     box.classList.remove("hidden");
-    $("#msgIcon").textContent = m.icon;
-    $("#msgTitle").textContent = m.title;
-    $("#msgBody").textContent = m.body;
+    $("#msgIcon").textContent=m.icon; $("#msgTitle").textContent=m.title; $("#msgBody").textContent=m.body;
     if(!m.sticky){ state.seenMsgs[m.id]=true; save(); }
   }
-
   function renderBackup(){
-    const box = $("#backup");
-    const hasData = Object.keys(state.days).length > 0;
-    if(!hasData){ box.classList.add("hidden"); return; }
-    const since = state.lastBackup ? Math.floor((Date.now()-state.lastBackup)/DAY) : Infinity;
-    if(since >= 7){
-      box.classList.remove("hidden");
-      $("#bkMsg").textContent = state.lastBackup
-        ? `Tu última copia fue hace ${since} días. Guarda una nueva por seguridad.`
-        : "Aún no has guardado ninguna copia. Si pierdes el teléfono, perderías tu historial.";
-    } else {
-      box.classList.add("hidden");
-    }
+    const box=$("#backup"), has=Object.keys(state.days).length>0;
+    if(!has){ box.classList.add("hidden"); return; }
+    const since=state.lastBackup?Math.floor((Date.now()-state.lastBackup)/DAY):Infinity;
+    if(since>=7){ box.classList.remove("hidden");
+      $("#bkMsg").textContent = state.lastBackup?`Tu última copia fue hace ${since} días. Guarda una nueva por seguridad.`:"Aún no has guardado ninguna copia. Si pierdes el teléfono, perderías tu historial.";
+    } else box.classList.add("hidden");
   }
-
   function renderCalendar(t){
-    const cal = $("#cal");
-    cal.innerHTML="";
+    const cal=$("#cal"); cal.innerHTML="";
     for(let n=1;n<=90;n++){
-      const isoStr = isoForDayNumber(n);
-      const d = getDay(isoStr);
-      const cell = document.createElement("div");
-      cell.className="cell";
-      const future = n>t, before = n<1;
-      if(future){ cell.classList.add("future"); }
-      else if(isComplete(d)){ cell.classList.add("done"); }
-      else if(isPartial(d) || isMainDone(d)){ cell.classList.add("part"); }
-      else { cell.classList.add("miss"); }
+      const isoStr=isoForDayNumber(n), d=getDay(isoStr), cell=document.createElement("div");
+      cell.className="cell"; const future=n>t;
+      if(future) cell.classList.add("future");
+      else if(isComplete(d)) cell.classList.add("done");
+      else if(isPartial(d)||isMainDone(d)) cell.classList.add("part");
+      else cell.classList.add("miss");
       if(n===t) cell.classList.add("today");
       if(PHASES.some(p=>p.from===n)) cell.classList.add("phase-edge");
-      cell.textContent = n;
-
-      // marcas: ejercicio y kegels (puntitos)
-      if(!future && d && (d.exercise || d.kegels)){
-        const marks=document.createElement("div"); marks.className="marks";
-        if(d.exercise){ const i=document.createElement("i"); marks.appendChild(i); }
-        if(d.kegels){ const i=document.createElement("i"); marks.appendChild(i); }
-        cell.appendChild(marks);
+      cell.textContent=n;
+      if(!future && d && (d.exercise||d.kegels)){
+        const m=document.createElement("div"); m.className="marks";
+        if(d.exercise) m.appendChild(document.createElement("i"));
+        if(d.kegels) m.appendChild(document.createElement("i"));
+        cell.appendChild(m);
       }
-
-      if(!future && !before){
-        cell.addEventListener("click", ()=>openModal(isoStr));
-      }
+      if(n>=1 && !future) cell.addEventListener("click",()=>openModal(isoStr));
       cal.appendChild(cell);
     }
   }
-
   function renderMini(t){
-    const wrap = $("#miniStats");
-    const exStreak = streakFor(predExercise), keStreak = streakFor(predKegels);
-    const exTotal = countFor(predExercise), keTotal = countFor(predKegels);
-    const items = [
-      {v:exStreak, k:"Racha de ejercicio", s:`${exTotal} días en total`},
-      {v:keStreak, k:"Racha de Kegels", s:`${keTotal} días en total`}
+    const items=[
+      {v:streakFor(predExercise), k:"Racha de ejercicio", s:`${countFor(predExercise)} días en total`},
+      {v:streakFor(predKegels), k:"Racha de Kegels", s:`${countFor(predKegels)} días en total`},
+      {v:totalUrges(), k:"Impulsos manejados", s:"con el botón de impulso"},
+      {v:countFor(d=>d&&d.morning==="yes"), k:state.discreet?"Señales matutinas":"Erecciones matutinas", s:"días con señal positiva"}
     ];
-    wrap.innerHTML = items.map(i=>`
-      <div class="mini"><div class="mv">${i.v}</div><div class="mk">${i.k}<small>${i.s}</small></div></div>
-    `).join("");
+    $("#miniStats").innerHTML = items.map(i=>`<div class="mini"><div class="mv">${i.v}</div><div class="mk">${i.k}<small>${i.s}</small></div></div>`).join("");
   }
-
+  function renderMarkers(t){
+    const wrap=$("#markers"); const last=Math.min(t,90);
+    $("#markersTitle").textContent = state.discreet ? "Marcadores" : "Marcadores físicos";
+    // erección matutina
+    let amDots="", amYes=0, amTracked=0;
+    for(let n=1;n<=last;n++){ const d=getDay(isoForDayNumber(n)); let cls=""; if(d&&d.morning==="yes"){cls="yes";amYes++;amTracked++;} else if(d&&d.morning==="no"){cls="no";amTracked++;} amDots+=`<i class="${cls}"></i>`; }
+    const amLabel = state.discreet?"Señal matutina":"Erección matutina / nocturna";
+    // masturbación
+    const noPorn=countFor(d=>d&&d.mast==="noporn"), withPorn=countFor(d=>d&&d.mast==="porn");
+    const flag=countFor(d=>d&&d.mastFlag);
+    const maxM=Math.max(noPorn,withPorn,1);
+    const labNo=state.discreet?"Sin pantalla":"Sin porno", labYes=state.discreet?"Con pantalla":"Con porno";
+    let html = `<div class="marker">
+        <div class="mh"><span>${amLabel}</span><span>${amTracked?`${amYes} de ${amTracked} días`:"sin datos aún"}</span></div>
+        <div class="am-dots">${amDots||'<span class="empty">Se registra en el detalle de cada día.</span>'}</div>
+      </div>`;
+    html += `<div class="marker">
+        <div class="mh"><span>Masturbación · origen de la excitación</span><span>${flag?flag+" días con señal a vigilar":""}</span></div>
+        <div class="bars2">
+          <div class="bar2"><span class="bl">${labNo}</span><span class="bt"><i style="width:${noPorn/maxM*100}%;background:var(--accent)"></i></span><span class="bv">${noPorn}</span></div>
+          <div class="bar2"><span class="bl">${labYes}</span><span class="bt"><i style="width:${withPorn/maxM*100}%;background:var(--alert)"></i></span><span class="bv">${withPorn}</span></div>
+        </div>
+      </div>`;
+    wrap.innerHTML = html;
+  }
   function renderChart(t){
-    const svg = $("#stressChart");
-    const last = Math.min(t,90);
-    const vals = [];
-    for(let n=1;n<=last;n++){ const d=getDay(isoForDayNumber(n)); vals.push({n, v:(d&&d.stress)?d.stress:0}); }
-    const have = vals.filter(x=>x.v>0);
-    const empty = $("#chartEmpty");
-    if(have.length===0 || last<1){
-      svg.innerHTML=""; empty.classList.remove("hidden");
-      $("#stressAvg").textContent=""; $("#chartStart").textContent=""; return;
-    }
-    empty.classList.add("hidden");
-    const avg = (have.reduce((s,x)=>s+x.v,0)/have.length);
-    $("#stressAvg").textContent = `promedio ${avg.toFixed(1)} / 5`;
-    $("#chartStart").textContent = "día 1";
-
-    const W=600,H=96,pad=6, n=vals.length;
-    const bw = (W-pad*2)/n;
-    const colorFor = v => v<=2 ? "var(--accent)" : (v===3 ? "var(--accent-2)" : "var(--warn)");
+    const svg=$("#stressChart"), last=Math.min(t,90), vals=[];
+    for(let n=1;n<=last;n++){ const d=getDay(isoForDayNumber(n)); vals.push((d&&d.stress)?d.stress:0); }
+    const have=vals.filter(v=>v>0);
+    if(have.length===0||last<1){ svg.innerHTML=""; $("#chartEmpty").classList.remove("hidden"); $("#stressAvg").textContent=""; $("#chartStart").textContent=""; return; }
+    $("#chartEmpty").classList.add("hidden");
+    const avg=have.reduce((s,v)=>s+v,0)/have.length;
+    $("#stressAvg").textContent=`promedio ${avg.toFixed(1)} / 5`; $("#chartStart").textContent="día 1";
+    const W=600,H=96,pad=6,n=vals.length,bw=(W-pad*2)/n;
+    const col=v=>v<=2?"var(--accent)":(v===3?"var(--accent-2)":"var(--warn)");
     let bars="";
-    vals.forEach((x,i)=>{
-      const cx = pad + i*bw;
-      if(x.v>0){
-        const h = (x.v/5)*(H-pad*2);
-        bars += `<rect x="${cx+bw*0.18}" y="${H-pad-h}" width="${Math.max(bw*0.64,1)}" height="${h}" rx="1.5" fill="${colorFor(x.v)}"></rect>`;
-      } else {
-        bars += `<rect x="${cx+bw*0.42}" y="${H-pad-2}" width="${Math.max(bw*0.16,1)}" height="2" rx="1" fill="var(--miss-ring)"></rect>`;
-      }
+    vals.forEach((v,i)=>{ const cx=pad+i*bw;
+      if(v>0){ const h=(v/5)*(H-pad*2); bars+=`<rect x="${cx+bw*0.18}" y="${H-pad-h}" width="${Math.max(bw*0.64,1)}" height="${h}" rx="1.5" fill="${col(v)}"></rect>`; }
+      else bars+=`<rect x="${cx+bw*0.42}" y="${H-pad-2}" width="${Math.max(bw*0.16,1)}" height="2" rx="1" fill="var(--miss-ring)"></rect>`;
     });
-    // linea de promedio
-    const ay = H-pad-(avg/5)*(H-pad*2);
-    bars += `<line x1="${pad}" y1="${ay}" x2="${W-pad}" y2="${ay}" stroke="var(--ink-soft)" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"></line>`;
-    svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
-    svg.innerHTML = bars;
+    const ay=H-pad-(avg/5)*(H-pad*2);
+    bars+=`<line x1="${pad}" y1="${ay}" x2="${W-pad}" y2="${ay}" stroke="var(--ink-soft)" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"></line>`;
+    svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.innerHTML=bars;
   }
-
   function renderNotes(){
-    const list = $("#notesList"), empty = $("#notesEmpty");
-    const entries = Object.keys(state.days)
-      .filter(k=>state.days[k].note && state.days[k].note.trim())
-      .sort((a,b)=> a<b?1:-1);
-    if(entries.length===0){ list.innerHTML=""; empty.classList.remove("hidden"); return; }
+    const list=$("#notesList"), empty=$("#notesEmpty");
+    const ks=Object.keys(state.days).filter(k=>state.days[k].note&&state.days[k].note.trim()).sort((a,b)=>a<b?1:-1);
+    if(!ks.length){ list.innerHTML=""; empty.classList.remove("hidden"); return; }
     empty.classList.add("hidden");
-    list.innerHTML = entries.map(k=>{
-      const dn = dayNumberOf(k);
-      const txt = state.days[k].note.replace(/[<>&]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
-      return `<div class="note-item"><div class="nd">Día ${dn} · ${fmtShort(k)}</div><div class="nt">${txt}</div></div>`;
-    }).join("");
+    list.innerHTML=ks.map(k=>`<div class="note-item"><div class="nd">Día ${dayNumberOf(k)} · ${fmtShort(k)}</div><div class="nt">${esc(state.days[k].note)}</div></div>`).join("");
   }
-
   function renderPhases(t){
-    const wrap = $("#phases");
-    wrap.innerHTML="";
+    const wrap=$("#phases"); wrap.innerHTML="";
     PHASES.forEach(p=>{
-      const row=document.createElement("div");
-      row.className="prow"+(t>=p.from && t<=p.to ? " cur":"");
-      let prog=0;
-      if(t>p.to) prog=100; else if(t<p.from) prog=0; else prog=Math.round((t-p.from+1)/(p.to-p.from+1)*100);
-      row.innerHTML=`
-        <span class="pn">${state.discreet ? "Etapa "+p.n : p.label}</span>
-        <span class="pbar"><i style="width:${prog}%"></i></span>
-        <span class="pd">día ${p.from}–${p.to}</span>`;
+      const row=document.createElement("div"); row.className="prow"+(t>=p.from&&t<=p.to?" cur":"");
+      let prog=0; if(t>p.to) prog=100; else if(t<p.from) prog=0; else prog=Math.round((t-p.from+1)/(p.to-p.from+1)*100);
+      row.innerHTML=`<span class="pn">${state.discreet?"Etapa "+p.n:p.label}</span><span class="pbar"><i style="width:${prog}%"></i></span><span class="pd">día ${p.from}–${p.to}</span>`;
       wrap.appendChild(row);
     });
   }
 
-  // ---------- modal detalle ----------
-  function openModal(isoStr){
-    selectedISO = isoStr;
-    renderModal();
-    $("#overlay").classList.add("show");
-  }
-  function closeModal(){
-    $("#overlay").classList.remove("show");
-    selectedISO = null;
-  }
+  // ---------- modal ----------
+  function openModal(isoStr){ selectedISO=isoStr; renderModal(); $("#overlay").classList.add("show"); }
+  function closeModal(){ $("#overlay").classList.remove("show"); selectedISO=null; }
   function renderModal(){
     if(!selectedISO) return;
-    const dn = dayNumberOf(selectedISO);
-    const d = getDay(selectedISO) || {};
-    const isToday = selectedISO===todayISO();
-    $("#mTitle").textContent = `Día ${dn}` + (isToday ? " · hoy" : "");
-    $("#mSubt").textContent = fmtDate(selectedISO);
-    const ml = mainLabelFor(dn);
-    $("#mMainLabel").innerHTML = ml.t + (ml.s ? `<small>${ml.s}</small>` : "");
-    setCheck("main", !!d.main, true);
-    setCheck("kegels", !!d.kegels, true);
-    setCheck("exercise", !!d.exercise, true);
-    $$("#mStressScale button").forEach(b=>b.classList.toggle("sel", Number(b.dataset.v)===d.stress));
-    if(document.activeElement !== $("#mNote")) $("#mNote").value = d.note || "";
+    const dn=dayNumberOf(selectedISO), d=getDay(selectedISO)||{}, isT=selectedISO===todayISO();
+    $("#mTitle").textContent=`Día ${dn}`+(isT?" · hoy":"");
+    $("#mSubt").textContent=fmtDate(selectedISO);
+    const ml=mainLabelFor(dn); $("#mMainLabel").innerHTML=ml.t+(ml.s?`<small>${ml.s}</small>`:"");
+    setCheck("main",!!d.main,true); setCheck("kegels",!!d.kegels,true); setCheck("exercise",!!d.exercise,true);
+    $$("#mStressScale button").forEach(b=>b.classList.toggle("sel",Number(b.dataset.v)===d.stress));
+    // mast
+    $$("#mMast button").forEach(b=>{ const on=b.dataset.mast===d.mast; b.classList.toggle("sel",on); b.classList.toggle("warm",on&&b.dataset.style==="warm"); });
+    $("#mMastFlagWrap").classList.toggle("hidden", !(d.mast==="noporn"||d.mast==="porn"));
+    setCheck("mastFlag",!!d.mastFlag,true);
+    // labels discretos
+    $("#mMastLabel").innerHTML = state.discreet ? 'Actividad<small>registro del origen del estímulo</small>' : 'Masturbación<small>lo que importa es de dónde viene la excitación, no la actividad</small>';
+    $$("#mMast button")[1].textContent = state.discreet?"Sí, sin pantalla":"Sí, sin porno";
+    $$("#mMast button")[2].textContent = state.discreet?"Sí, con pantalla":"Sí, con porno";
+    $("#mFlagLabel").innerHTML = state.discreet ? 'Necesité estímulo mental tipo pantalla<small>no es retroceso, es información</small>' : 'Necesité fantasear con escenas tipo porno<small>no es retroceso, es información del reentrenamiento</small>';
+    $("#mMorningLabel").innerHTML = state.discreet ? 'Señal matutina<small>marcador físico — útil de revisar en el tiempo</small>' : 'Erección matutina / nocturna<small>marcador físico — útil de revisar a lo largo de semanas</small>';
+    // morning
+    $$("#mMorning button").forEach(b=>{ const on=b.dataset.am===d.morning; b.classList.toggle("sel",on); b.classList.toggle("warm",on&&b.dataset.style==="warm"); });
+    // alcohol
+    $("#alcVal").textContent=d.alcohol||0;
+    // encounter
+    const enc=d.enc||null;
+    setCheck("_enc",!!enc,true);
+    $("#encBox").classList.toggle("hidden",!enc);
+    if(enc){
+      $$("#encAnx button").forEach(b=>b.classList.toggle("sel",Number(b.dataset.v)===enc.a));
+      $$("#encOut button").forEach(b=>{ const on=b.dataset.o===enc.o; b.classList.toggle("sel",on); b.classList.toggle("warm",on&&b.dataset.style==="warm"); b.classList.toggle("neutral",on&&b.dataset.style==="neutral"); });
+      if(document.activeElement!==$("#encNote")) $("#encNote").value=enc.n||"";
+    }
+    if(document.activeElement!==$("#mNote")) $("#mNote").value=d.note||"";
   }
 
   // ---------- escritura ----------
-  function ensureDay(isoStr){
-    if(!state.days[isoStr]) state.days[isoStr]={main:false,kegels:false,exercise:false,stress:0,note:""};
-    return state.days[isoStr];
+  function ensureDay(isoStr){ if(!state.days[isoStr]) state.days[isoStr]={main:false,kegels:false,exercise:false,stress:0,note:""}; return state.days[isoStr]; }
+  function toggleField(isoStr,key){ const d=ensureDay(isoStr); d[key]=!d[key]; save(); render(); }
+  function setStress(isoStr,v){ const d=ensureDay(isoStr); d.stress=(d.stress===v?0:v); save(); render(); }
+  function setNote(isoStr,txt){ const d=ensureDay(isoStr); d.note=txt; save(); }
+  function setMast(isoStr,v){ const d=ensureDay(isoStr); d.mast=(d.mast===v?"":v); if(d.mast!=="noporn"&&d.mast!=="porn") d.mastFlag=false; save(); render(); }
+  function setMorning(isoStr,v){ const d=ensureDay(isoStr); d.morning=(d.morning===v?"":v); save(); render(); }
+  function setAlcohol(isoStr,delta){ const d=ensureDay(isoStr); d.alcohol=Math.max(0,(d.alcohol||0)+delta); save(); render(); }
+  function toggleEnc(isoStr){ const d=ensureDay(isoStr); if(d.enc) delete d.enc; else d.enc={a:0,o:"",n:""}; save(); render(); }
+  function setEnc(isoStr,patch){ const d=ensureDay(isoStr); d.enc=Object.assign({a:0,o:"",n:""},d.enc,patch); save(); render(); }
+
+  function flashSaved(){ const s=$("#savedMsg"); s.classList.add("show"); clearTimeout(flashSaved._t); flashSaved._t=setTimeout(()=>s.classList.remove("show"),1200); }
+
+  // tarjeta hoy
+  $$('#checkinTitle ~ .check').forEach(c=>c.addEventListener("click",()=>{ if(dayNumberOf(todayISO())<1) return; toggleField(todayISO(),c.dataset.key); flashSaved(); }));
+  $$('#stressScale button').forEach(b=>b.addEventListener("click",()=>{ if(dayNumberOf(todayISO())<1) return; setStress(todayISO(),Number(b.dataset.v)); flashSaved(); }));
+  let noteT; $("#note").addEventListener("input",e=>{ if(dayNumberOf(todayISO())<1) return; setNote(todayISO(),e.target.value); clearTimeout(noteT); noteT=setTimeout(()=>{flashSaved();renderNotes();},400); });
+  $("#moreToday").addEventListener("click",()=>{ if(dayNumberOf(todayISO())<1){ alert("El plan empieza el "+fmtShort(state.start)+"."); return; } openModal(todayISO()); });
+
+  // modal
+  $$('.check[data-mkey="main"], .check[data-mkey="kegels"], .check[data-mkey="exercise"], .check[data-mkey="mastFlag"]').forEach(c=>c.addEventListener("click",()=>{ if(selectedISO) toggleField(selectedISO,c.dataset.mkey); }));
+  $$('#mStressScale button').forEach(b=>b.addEventListener("click",()=>{ if(selectedISO) setStress(selectedISO,Number(b.dataset.v)); }));
+  $$('#mMast button').forEach(b=>b.addEventListener("click",()=>{ if(selectedISO) setMast(selectedISO,b.dataset.mast); }));
+  $$('#mMorning button').forEach(b=>b.addEventListener("click",()=>{ if(selectedISO) setMorning(selectedISO,b.dataset.am); }));
+  $("#alcMinus").addEventListener("click",()=>{ if(selectedISO) setAlcohol(selectedISO,-1); });
+  $("#alcPlus").addEventListener("click",()=>{ if(selectedISO) setAlcohol(selectedISO,1); });
+  $("#encToggle").addEventListener("click",()=>{ if(selectedISO) toggleEnc(selectedISO); });
+  $$('#encAnx button').forEach(b=>b.addEventListener("click",()=>{ if(selectedISO) setEnc(selectedISO,{a:Number(b.dataset.v)}); }));
+  $$('#encOut button').forEach(b=>b.addEventListener("click",()=>{ if(selectedISO){ const cur=getDay(selectedISO).enc; setEnc(selectedISO,{o:cur&&cur.o===b.dataset.o?"":b.dataset.o}); } }));
+  let encNoteT; $("#encNote").addEventListener("input",e=>{ if(!selectedISO) return; const d=ensureDay(selectedISO); d.enc=Object.assign({a:0,o:"",n:""},d.enc,{n:e.target.value}); clearTimeout(encNoteT); encNoteT=setTimeout(save,400); });
+  let mNoteT; $("#mNote").addEventListener("input",e=>{ if(!selectedISO) return; setNote(selectedISO,e.target.value); clearTimeout(mNoteT); mNoteT=setTimeout(()=>renderNotes(),400); });
+  $("#mClear").addEventListener("click",()=>{ if(selectedISO&&confirm("¿Borrar todo lo registrado en este día?")){ delete state.days[selectedISO]; save(); render(); closeModal(); } });
+  $("#mDone").addEventListener("click",closeModal);
+  $("#mClose").addEventListener("click",closeModal);
+  $("#overlay").addEventListener("click",e=>{ if(e.target===$("#overlay")) closeModal(); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ if(selectedISO) closeModal(); $("#urgeOverlay").classList.remove("show"); } });
+
+  // ---------- impulso ----------
+  const SUGS=[
+    "Levántate y cambia de habitación, o sal a caminar 5-10 min.",
+    "Haz 15 sentadillas o 10 lagartijas ahora mismo.",
+    "Escríbele o llámale a alguien.",
+    "Toma agua y haz algo con las manos: ordena algo, cocina.",
+    "Sal al aire libre y estírate un par de minutos.",
+    "Aléjate del teléfono: déjalo en otra habitación 10 min."
+  ];
+  let sugIdx=0;
+  $("#urgeBtn").addEventListener("click",()=>{ sugIdx=(sugIdx+ (new Date().getSeconds()%SUGS.length))%SUGS.length; $("#urgeSug").textContent=SUGS[sugIdx]; $("#urgeCount").textContent=totalUrges(); $("#urgeOverlay").classList.add("show"); });
+  $("#urgeClose").addEventListener("click",()=>$("#urgeOverlay").classList.remove("show"));
+  $("#urgeOverlay").addEventListener("click",e=>{ if(e.target===$("#urgeOverlay")) $("#urgeOverlay").classList.remove("show"); });
+  $("#urgeDone").addEventListener("click",()=>{ const k=todayISO(); state.urges[k]=(state.urges[k]||0)+1; save(); render(); $("#urgeCount").textContent=totalUrges(); setTimeout(()=>$("#urgeOverlay").classList.remove("show"),350); });
+
+  // ---------- kegel timer ----------
+  let kt={running:false,timer:null,rep:0,phase:"",left:0};
+  function ktStop(done){
+    kt.running=false; clearInterval(kt.timer);
+    const c=$("#ktCircle"); c.className="kt-circle"; $("#ktPhase").textContent=done?"✓":"Listo";
+    $("#ktMeta").textContent= done?"Serie completa": "Serie de 10 repeticiones · 3s / 3s";
+    $("#ktBtn").textContent="Iniciar guía"; $("#ktBtn").classList.remove("stop");
+    if(done){ const d=ensureDay(todayISO()); d.kegels=true; save(); render(); }
   }
-  function toggleField(isoStr, key){ const d=ensureDay(isoStr); d[key]=!d[key]; save(); render(); }
-  function setStress(isoStr, v){ const d=ensureDay(isoStr); d.stress=(d.stress===v?0:v); save(); render(); }
-  function setNote(isoStr, txt){ const d=ensureDay(isoStr); d.note=txt; save(); }
-
-  function flashSaved(){
-    const s=$("#savedMsg"); s.classList.add("show");
-    clearTimeout(flashSaved._t); flashSaved._t=setTimeout(()=>s.classList.remove("show"),1200);
-  }
-
-  // ---------- interacción: tarjeta de hoy ----------
-  document.querySelectorAll('#checkinTitle ~ .check').forEach(c=>{
-    c.addEventListener("click",()=>{
-      if(dayNumberOf(todayISO())<1) return;
-      toggleField(todayISO(), c.dataset.key); flashSaved();
-    });
-  });
-  document.querySelectorAll('#stressScale button').forEach(b=>{
-    b.addEventListener("click",()=>{
-      if(dayNumberOf(todayISO())<1) return;
-      setStress(todayISO(), Number(b.dataset.v)); flashSaved();
-    });
-  });
-  let noteT;
-  $("#note").addEventListener("input",e=>{
-    if(dayNumberOf(todayISO())<1) return;
-    setNote(todayISO(), e.target.value);
-    clearTimeout(noteT); noteT=setTimeout(()=>{flashSaved(); renderNotes();},400);
-  });
-
-  // ---------- interacción: modal ----------
-  document.querySelectorAll('.check[data-mkey]').forEach(c=>{
-    c.addEventListener("click",()=>{ if(selectedISO) toggleField(selectedISO, c.dataset.mkey); });
-  });
-  document.querySelectorAll('#mStressScale button').forEach(b=>{
-    b.addEventListener("click",()=>{ if(selectedISO) setStress(selectedISO, Number(b.dataset.v)); });
-  });
-  let mNoteT;
-  $("#mNote").addEventListener("input",e=>{
-    if(!selectedISO) return;
-    setNote(selectedISO, e.target.value);
-    clearTimeout(mNoteT); mNoteT=setTimeout(()=>renderNotes(),400);
-  });
-  $("#mClear").addEventListener("click",()=>{
-    if(!selectedISO) return;
-    if(confirm("¿Borrar todo lo registrado en este día?")){
-      delete state.days[selectedISO]; save(); render(); closeModal();
+  function ktTick(){
+    kt.left--;
+    if(kt.left<=0){
+      if(kt.phase==="contrae"){ kt.phase="relaja"; kt.left=3; $("#ktCircle").className="kt-circle relax"; }
+      else { kt.rep++; if(kt.rep>10){ ktStop(true); return; } kt.phase="contrae"; kt.left=3; $("#ktCircle").className="kt-circle contract"; }
     }
+    $("#ktPhase").textContent = (kt.phase==="contrae"?"Contrae":"Relaja")+" "+kt.left;
+    $("#ktMeta").textContent = `Repetición ${Math.min(kt.rep,10)} / 10`;
+  }
+  $("#ktBtn").addEventListener("click",()=>{
+    if(kt.running){ ktStop(false); return; }
+    kt={running:true,timer:null,rep:1,phase:"contrae",left:3};
+    $("#ktCircle").className="kt-circle contract"; $("#ktPhase").textContent="Contrae 3"; $("#ktMeta").textContent="Repetición 1 / 10";
+    $("#ktBtn").textContent="Detener"; $("#ktBtn").classList.add("stop");
+    kt.timer=setInterval(ktTick,1000);
   });
-  $("#mDone").addEventListener("click", closeModal);
-  $("#mClose").addEventListener("click", closeModal);
-  $("#overlay").addEventListener("click", e=>{ if(e.target===$("#overlay")) closeModal(); });
-  document.addEventListener("keydown", e=>{ if(e.key==="Escape" && selectedISO) closeModal(); });
 
   // ---------- ajustes ----------
   $("#discreetSwitch").addEventListener("click",()=>{ state.discreet=!state.discreet; save(); render(); });
-
   function doExport(){
     const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement("a");
-    const stamp = todayISO();
-    a.href=url; a.download=`mi-seguimiento-${stamp}.json`; a.click();
-    URL.revokeObjectURL(url);
-    state.lastBackup = Date.now(); save(); render();
+    const url=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=url; a.download=`mi-seguimiento-${todayISO()}.json`; a.click(); URL.revokeObjectURL(url);
+    state.lastBackup=Date.now(); save(); render();
   }
-  $("#exportBtn").addEventListener("click", doExport);
-  $("#bkBtn").addEventListener("click", doExport);
-
+  $("#exportBtn").addEventListener("click",doExport); $("#bkBtn").addEventListener("click",doExport);
   $("#importBtn").addEventListener("click",()=>$("#fileInput").click());
   $("#fileInput").addEventListener("change",e=>{
-    const f=e.target.files[0]; if(!f) return;
-    const r=new FileReader();
-    r.onload=()=>{
-      try{
-        const p=JSON.parse(r.result);
-        if(!p.days){ alert("Ese archivo no parece una copia válida."); return; }
-        if(confirm("Esto reemplazará los datos actuales con los de la copia. ¿Continuar?")){
-          state=Object.assign(structuredClone(defaults),p); save(); render();
-        }
-      }catch(err){ alert("No se pudo leer el archivo."); }
-    };
+    const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+    r.onload=()=>{ try{ const p=JSON.parse(r.result); if(!p.days){ alert("Ese archivo no parece una copia válida."); return; }
+      if(confirm("Esto reemplazará los datos actuales con los de la copia. ¿Continuar?")){ state=Object.assign(structuredClone(defaults),p); save(); render(); } }
+      catch(err){ alert("No se pudo leer el archivo."); } };
     r.readAsText(f); e.target.value="";
   });
   $("#startBtn").addEventListener("click",()=>{
-    const v=prompt("Fecha de inicio (formato AAAA-MM-DD). Día 1 del plan:", state.start);
-    if(!v) return;
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(v) || isNaN(parseISO(v).getTime())){ alert("Formato no válido. Usa AAAA-MM-DD."); return; }
+    const v=prompt("Fecha de inicio (AAAA-MM-DD). Día 1 del plan:",state.start); if(!v) return;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(v)||isNaN(parseISO(v).getTime())){ alert("Formato no válido. Usa AAAA-MM-DD."); return; }
     state.start=v; save(); render();
   });
   $("#resetBtn").addEventListener("click",()=>{
     if(confirm("¿Borrar TODO el historial y empezar de cero? Esto no se puede deshacer. (Considera exportar una copia antes.)")){
-      const start=state.start, discreet=state.discreet;
-      state=structuredClone(defaults); state.start=start; state.discreet=discreet;
-      save(); render();
+      const start=state.start, discreet=state.discreet; state=structuredClone(defaults); state.start=start; state.discreet=discreet; save(); render();
     }
   });
 
-  // ---------- blindaje de memoria ----------
   async function hardenStorage(){
     const note=$("#storageNote"), txt=$("#storageTxt");
     try{
-      if(navigator.storage && navigator.storage.persist){
-        let persisted = await navigator.storage.persisted();
-        if(!persisted) persisted = await navigator.storage.persist();
-        if(persisted){ note.classList.add("ok"); txt.textContent="Almacenamiento protegido en este dispositivo."; }
-        else { txt.textContent="Almacenamiento normal. Respalda tu copia de vez en cuando por seguridad."; }
-      } else {
-        txt.textContent="Respalda tu copia de vez en cuando por seguridad.";
-      }
+      if(navigator.storage&&navigator.storage.persist){
+        let p=await navigator.storage.persisted(); if(!p) p=await navigator.storage.persist();
+        if(p){ note.classList.add("ok"); txt.textContent="Almacenamiento protegido en este dispositivo."; }
+        else txt.textContent="Almacenamiento normal. Respalda tu copia de vez en cuando por seguridad.";
+      } else txt.textContent="Respalda tu copia de vez en cuando por seguridad.";
     }catch(e){ txt.textContent="Respalda tu copia de vez en cuando por seguridad."; }
   }
 
-  render();
-  hardenStorage();
+  render(); hardenStorage();
 })();
 </script>
 </body>
